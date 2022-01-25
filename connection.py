@@ -1,30 +1,30 @@
-def read_file(file_name, separator=';'):
-    """Read CSV file into a data table.
+import csv
+import os
 
-    Args:
-        file_name: The name of the CSV data file.
-        separator: The CSV separator character
+HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+DATA_FIELD_PATH_1 = 'sample_data/question.csv'
+DATA_FIELD_PATH_2 = 'sample_data/question.csv'
 
-    Returns:
-        The data parsed into a list of lists.
-    """
-    try:
-        with open(file_name, "r") as file:
-            lines = file.readlines()
-        return [element.replace("\n", "").split(separator) for element in lines]
-    except IOError:
-        return []
+def read_answer_file():
+    list = []
+    with open(DATA_FIELD_PATH_1, "r") as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',')
+        for row in reader:
+            list.append(row)
+    return list
 
 
-def write_file(file_name, table, separator=';'):
-    """Write tabular data into a CSV file.
+def read_question_file():
+    list = []
+    with open(DATA_FIELD_PATH_2, "r") as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',')
+        for row in reader:
+            list.append(row)
+    return list
 
-    Args:
-        file_name: The name of the file to write to.
-        table: list of lists containing tabular data.
-        separator: The CSV separator character
-    """
-    with open(file_name, "w") as file:
-        for record in table:
-            row = separator.join(record)
-            file.write(row + "\n")
+
+# def write_answer_file(file_name, table, separator=';'):
+#     with open(file_name, "w") as file:
+#         for record in table:
+#             row = separator.join(record)
+#             file.write(row + "\n")

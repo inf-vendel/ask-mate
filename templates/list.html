@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AskMate</title>
+</head>
+<body>
+<h1>Ask Mate</h1>
+<a href=""></a>
+<table>
+    <thead>
+        <tr>
+            {%  for head in header %}
+                <th>{{ ' '.join(head.split('_')).title() }}</th>
+            {%  endfor %}
+        </tr>
+        </th>
+        {% for question in question_list %}
+            <tr>
+            {% for key,value in question.items() %}
+                    <td>{{ value }}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
