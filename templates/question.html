@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Ask Mate</h1>
-<a href=""></a>
+<a href="{{ url_for('list_questions') }}">Back to Main Page</a>
 <table>
 <h2>Question Number</h2>
     <thead>
@@ -18,7 +18,7 @@
          <tbody>
                 <tr>
                 {% for value in result %}
-                        <td>{{ value }}</td>
+                    <td>{{ value }}</td>
                 {% endfor %}
                 </tr>
 </tbody>
@@ -27,7 +27,9 @@
 <table>
 <h3>Answers</h3>
     <ol>
-
+        {% for answer in answer_list %}
+            <li>{{ answer }}</li>
+        {% endfor %}
     </ol>
 </table>
 </body>

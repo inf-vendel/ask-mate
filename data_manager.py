@@ -8,6 +8,11 @@ def get_question_list():
     return question_list
 
 
+def get_answer_list():
+    answer_list = connection.read_file('answer')
+    return answer_list
+
+
 def get_question_by_id(id):
     question_list = get_question_list()
     if len(question_list) <= id:
@@ -21,7 +26,13 @@ def filter_question(question, headers=[]):
         data.append(question[item])
     return data
 
-
+def get_answer_by_id(id):
+    answer_list = get_answer_list()
+    print(answer_list)
+    if len(answer_list) <= id:
+        return f"There is no question with id:{id}."
+    else:
+        return answer_list[id - 1]
 
 # def add_question(question):
 #     data = connection.read_file()
