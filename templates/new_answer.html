@@ -5,6 +5,15 @@
 <title>FastFox</title>
 </head>
 <body>
-<h1>FastFox</h1>
+<h1>Post an Answer</h1>
+<form action="/question/<int:question_id>/new-answer" method="POST">
+    <p>
+      <label for="message">Message:</label><br>
+        <textarea name="message" type="text" required></textarea>
+    </p>
+    <p>
+        <button type="submit">Post an Answer</button>
+    </p>
+</form>
 </body>
 </html>

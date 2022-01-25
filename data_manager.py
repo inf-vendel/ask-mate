@@ -28,7 +28,6 @@ def filter_question(question, headers=[]):
 
 def get_answer_by_id(id):
     answer_list = get_answer_list()
-    print(answer_list)
     if id in [int(answer['question_id']) for answer in answer_list]:
         answers = [answer['message'] for answer in answer_list if int(answer['question_id']) == id]
         return answers
