@@ -13,7 +13,7 @@ def get_question_by_id(id):
     if len(question_list) <= id:
         return f"There is no question with id:{id}."
     else:
-        return question_list[id]
+        return question_list[id-1]
 
 def filter_question(question, headers=[]):
     data = []
