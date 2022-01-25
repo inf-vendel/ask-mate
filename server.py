@@ -18,7 +18,7 @@ def display_question(id):
     header = ["title", "message"]
     result = data_manager.filter_question(question, header)
     answer = data_manager.get_answer_by_id(id)
-    return render_template('question.html', result=result, answer_list=answer, header=header)
+    return render_template('question.html', result=result, answer_list=answer, header=header, question_id=id)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -30,6 +30,15 @@ def ask_question():
     return render_template('ask.html')
 
 
+@app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
+def post_answer(question_id):
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_manager.post_answer(result, question_id=question_id)
+        return redirect('/list')
+    return render_template('new_answer.html')
+
+
 if __name__ == "__main__":
     app.run(
         port=5000,
@@ -38,7 +47,6 @@ if __name__ == "__main__":
 
 
 
-# @app.route("/question/<question_id>/new-answer")
 # @app.route("/question/<question_id>/delete")
 # @app.route("/question/<question_id>/edit")
 # @app.route("/question/<question_id>/vote_up")
