@@ -9,7 +9,6 @@ app = Flask(__name__)
 @app.route("/list")
 def list_questions():
     question_list = data_manager.get_question_list()
-    print(question_list)
     return render_template('list.html', question_list=question_list, header=connection.HEADER)
 
 
@@ -19,7 +18,6 @@ def display_question(id):
     header = ["title", "message"]
     result = data_manager.filter_question(question, header)
     answer = data_manager.get_answer_by_id(id)
-    print(answer)
     return render_template('question.html', result=result, answer_list=answer, header=header)
 
 

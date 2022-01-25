@@ -28,11 +28,11 @@ def filter_question(question, headers=[]):
 
 def get_answer_by_id(id):
     answer_list = get_answer_list()
-    print(answer_list)
-    if len(answer_list) <= id:
-        return f"There is no question with id:{id}."
+    if id in [int(answer['question_id']) for answer in answer_list]:
+        answers = [answer['message'] for answer in answer_list if int(answer['question_id']) == id]
+        return answers
     else:
-        return answer_list[id - 1]
+        return False
 
 # def add_question(question):
 #     data = connection.read_file()
