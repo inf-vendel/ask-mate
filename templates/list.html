@@ -14,14 +14,20 @@
                 <th>{{ ' '.join(head.split('_')).title() }}</th>
             {%  endfor %}
         </tr>
-        </th>
-        {% for question in question_list %}
-            <tr>
-            {% for key,value in question.items() %}
-                    <td>{{ value }}</td>
+         <tbody>
+            {% for question in question_list %}
+                <tr>
+                {% for key,value in question.items() %}
+                    {% if key == 'id' %}
+                        <td><a href="{{ url_for('display_question', id=question['id'])}}">{{ value }}</a></td>
+                    {%  else %}
+                        <td>{{ value }}</td>
+                    {%  endif %}
+                {% endfor %}
+                </tr>
             {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
+</tbody>
+    </thead>
+</table>
 </body>
 </html>

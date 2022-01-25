@@ -11,13 +11,23 @@ def list_questions():
     return render_template('list.html', question_list=question_list, header=connection.HEADER)
 
 
+@app.route("/question/<int:id>")
+def display_question(id):
+    question_display = connection.read_question_file()
+    display = connection.read_answer_file()
+    result = request.form.to_dict()
+    result['id'] = id
+    return render_template('question.html', question_display=question_display, display=display, header=connection.HEADER)
+
+
+
 if __name__ == "__main__":
     app.run(
         port=5000,
         debug=True,
     )
 
-# @app.route("/question/<question_id>")
+
 # @app.route("/add-question")
 # @app.route("/question/<question_id>/new-answer")
 # @app.route("/question/<question_id>/delete")
