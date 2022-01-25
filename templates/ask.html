@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FastFox</title>
+</head>
+<body>
+<h1>Ask a Question</h1>
+<form action="/add-question" method="POST">
+    <p>
+        <label for="title">Title:</label><br>
+    <input name="title" type="text" required>
+    </p>
+    <p>
+      <label for="message">Message:</label><br>
+        <textarea name="message" type="text" required></textarea>
+    </p>
+    <p>
+        <button type="submit">Submit question</button>
+    </p>
+</form>
+</body>
+</html>

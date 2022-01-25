@@ -34,12 +34,33 @@ def get_answer_by_id(id):
     else:
         return False
 
-# def add_question(question):
-#     data = connection.read_file()
-#     data.append(question)
-#     connection.write_file()
-#
-#
+
+def add_question(question):
+    data = get_question_list()
+    for header in HEADER:
+        if header not in list(question.keys()):
+            question[header] = fill_question(header)
+    data.append(question)
+    connection.write_file('question', data)
+
+
+def fill_question(header):
+    if header == 'id':
+        return generate_new_id()
+    elif header == 'submission_time':
+        return 1234
+    elif header == 'view_number':
+        return 0
+    elif header == 'vote_number':
+        return 0
+
+
+
+
+
+def generate_new_id():
+    return len(get_question_list())
+
 # def post_answer():
 #     pass
 #

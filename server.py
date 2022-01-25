@@ -21,6 +21,14 @@ def display_question(id):
     return render_template('question.html', result=result, answer_list=answer, header=header)
 
 
+@app.route("/add-question", methods=['GET', 'POST'])
+def ask_question():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_manager.add_question(result)
+        return redirect('/list')
+    return render_template('ask.html')
+
 
 if __name__ == "__main__":
     app.run(
@@ -29,7 +37,7 @@ if __name__ == "__main__":
     )
 
 
-# @app.route("/add-question")
+
 # @app.route("/question/<question_id>/new-answer")
 # @app.route("/question/<question_id>/delete")
 # @app.route("/question/<question_id>/edit")
