@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
+import data_manager
 
 app = Flask(__name__)
 
@@ -7,17 +8,16 @@ app = Flask(__name__)
 @app.route('/')
 @app.route("/list")
 def list_questions():
-    question_list = connection.read_question_file()
+    question_list = data_manager.get_question_list()
     return render_template('list.html', question_list=question_list, header=connection.HEADER)
 
 
 @app.route("/question/<int:id>")
 def display_question(id):
-    question_display = connection.read_question_file()
-    display = connection.read_answer_file()
-    result = request.form.to_dict()
-    result['id'] = id
-    return render_template('question.html', question_display=question_display, display=display, header=connection.HEADER)
+    question = data_manager.get_question_by_id(id)
+    header = ["title", "message"]
+    result = data_manager.filter_question(question, header)
+    return render_template('question.html', result=result, header=header)
 
 
 
