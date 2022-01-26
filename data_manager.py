@@ -31,7 +31,7 @@ def filter_question(question, headers=[]):
 def get_answers_by_id(id):
     answer_list = get_answer_list()
     if id in [int(answer['question_id']) for answer in answer_list]:
-        answers = [answer['message'] for answer in answer_list if int(answer['question_id']) == id]
+        answers = [answer for answer in answer_list if int(answer['question_id']) == id]
         return answers
     else:
         return []
@@ -57,6 +57,14 @@ def delete_question(question_id):
     id = int(question_id)
     del question_list[get_dict_from_list(id=id, list=question_list, head="id")]
     connection.write_file('question', question_list, header=QUESTION_HEADER)
+
+
+def delete_answer(id):
+    answers = get_answer_list()
+
+    id = int(id)
+    del answers[get_dict_from_list(id=id, list=answers, head="id")]
+    connection.write_file('answer', answers, header=ANSWER_HEADER)
 
 
 def post_answer(answer, question_id):
