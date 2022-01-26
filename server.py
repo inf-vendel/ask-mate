@@ -25,11 +25,11 @@ def display_question(id):
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
 def delete_question(question_id):
-    if request.method == 'POST':
-        result = request.form.to_dict()
-        data_manager.add_question(result)
+    if request.method == 'GET':
+        data_manager.delete_question(question_id)
         return redirect('/list')
     return render_template('question.html')
+
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def ask_question():

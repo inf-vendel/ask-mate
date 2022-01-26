@@ -7,22 +7,21 @@
 <body>
 <h1>FastFox</h1>
 <a href="{{ url_for('list_questions') }}">Back to Main Page</a>
-
 <table>
-<h2>Question number {{ question_id }}</h2>
+    <h2>Question number {{ question_id }}</h2>
     <thead>
         <tr>
             {%  for head in header %}
                 <th>{{ ' '.join(head.split('_')).title() }}</th>
             {%  endfor %}
         </tr>
-         <tbody>
+            <tbody>
                 <tr>
                 {% for value in result %}
                     <td>{{ value }}</td>
                 {% endfor %}
                 </tr>
-</tbody>
+            </tbody>
     </thead>
 </table>
 <table>

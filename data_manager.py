@@ -3,6 +3,7 @@ import connection
 QUESTION_HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 ANSWER_HEADER = ["id","submission_time","vote_number","question_id","message","image"]
 
+
 def get_question_list():
     question_list = connection.read_file('question')
     sorted_list = sorted(question_list, key=lambda x: int(x['id']), reverse=True)
@@ -16,10 +17,8 @@ def get_answer_list():
 
 def get_question_by_id(id):
     question_list = get_question_list()
-    if len(question_list) < id:
-        return f"There is no question with id:{id}."
-    else:
-        return question_list[id-1]
+    jani = get_dict_from_list(question_list, "id", id)
+    return question_list[jani]
 
 
 def filter_question(question, headers=[]):
@@ -38,26 +37,25 @@ def get_answers_by_id(id):
 
 
 def add_question(question):
-    print('EZ AZ: ', question)
     data = get_question_list()
     for header in QUESTION_HEADER:
         if header not in list(question.keys()):
             question[header] = fill_post(post_type='question', header=header)
     data.append(question)
-    print("Ezt skubizzátok: ", data)
     connection.write_file('question', data, header=QUESTION_HEADER)
 
 
-def get_dict_from_list(list, key):
-    for i, k in enumerate(list):
-        if k[key] == question_id:
+def get_dict_from_list(list, head, id):
+    for i, question in enumerate(list):
+        if int(question[head]) == id:
             return i
 
 
 def delete_question(question_id):
     question_list = get_question_list()
-    del question_list[get_dict_from_list(question_id, "id")]
-    connection.write_file('question', data, header=QUESTION_HEADER)
+    id = int(question_id)
+    del question_list[get_dict_from_list(id=id, list=question_list, head="id")]
+    connection.write_file('question', question_list, header=QUESTION_HEADER)
 
 
 def post_answer(answer, question_id):
@@ -82,10 +80,13 @@ def fill_post(post_type, header):
 
 
 def generate_new_id(post_type):
+    arr = get_question_list() if post_type == 'question' else get_answer_list()
+    ids = [int(q['id']) for q in arr]
+    new_id = max(ids) + 1
     if post_type == 'question':
-        return len(get_question_list())
+        return new_id
     if post_type == 'answer':
-        return len(get_answer_list())
+        return new_id
 
 
 def sort_data(data, header, reversed):
