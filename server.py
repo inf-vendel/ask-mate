@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import data_manager
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 
@@ -35,7 +37,10 @@ def delete_question(question_id):
 def ask_question():
     if request.method == 'POST':
         result = request.form.to_dict()
-        print("HUPILILAPINA: ", result)
+        file = request.files['image']
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join('images', filename))
         data_manager.add_question(result)
         return redirect('/list')
     return render_template('ask.html')

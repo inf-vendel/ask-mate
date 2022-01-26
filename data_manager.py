@@ -27,6 +27,7 @@ def filter_question(question, headers=[]):
         data.append(question[item])
     return data
 
+
 def get_answers_by_id(id):
     answer_list = get_answer_list()
     if id in [int(answer['question_id']) for answer in answer_list]:
