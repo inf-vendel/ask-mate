@@ -1,11 +1,12 @@
 import connection
 
-HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+QUESTION_HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 ANSWER_HEADER = ["id","submission_time","vote_number","question_id","message","image"]
 
 def get_question_list():
     question_list = connection.read_file('question')
-    return question_list
+    sorted_list = sorted(question_list, key=lambda x: int(x['id']), reverse=True)
+    return sorted_list
 
 
 def get_answer_list():
@@ -26,22 +27,22 @@ def filter_question(question, headers=[]):
         data.append(question[item])
     return data
 
-def get_answer_by_id(id):
+def get_answers_by_id(id):
     answer_list = get_answer_list()
     if id in [int(answer['question_id']) for answer in answer_list]:
         answers = [answer['message'] for answer in answer_list if int(answer['question_id']) == id]
         return answers
     else:
-        return False
+        return []
 
 
 def add_question(question):
     data = get_question_list()
-    for header in HEADER:
+    for header in QUESTION_HEADER:
         if header not in list(question.keys()):
             question[header] = fill_post(post_type='question', header=header)
     data.append(question)
-    connection.write_file('question', data)
+    connection.write_file('question', data, header=QUESTION_HEADER)
 
 
 def post_answer(answer, question_id):
@@ -51,7 +52,7 @@ def post_answer(answer, question_id):
         if header not in list(answer.keys()):
             answer[header] = fill_post(post_type='answer', header=header)
     data.append(answer)
-    connection.write_file('answer', data)
+    connection.write_file('answer', data, header=ANSWER_HEADER)
 
 
 def fill_post(post_type, header):
@@ -73,5 +74,3 @@ def generate_new_id(post_type):
 
 
 
-#
-# def sort_question():
