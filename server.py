@@ -17,7 +17,6 @@ def list_questions():
 @app.route("/question/<int:id>", methods=['GET', 'POST'])
 def display_question(id):
     question = data_manager.get_question_by_id(id)
-    print("!!!!", question)
     header = ["title", "message"]
     result = data_manager.filter_question(question=question, headers=header)
     answer = data_manager.get_answers_by_id(id)
@@ -36,6 +35,7 @@ def delete_question(question_id):
 def ask_question():
     if request.method == 'POST':
         result = request.form.to_dict()
+        print("HUPILILAPINA: ", result)
         data_manager.add_question(result)
         return redirect('/list')
     return render_template('ask.html')

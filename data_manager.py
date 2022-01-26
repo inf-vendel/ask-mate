@@ -16,10 +16,11 @@ def get_answer_list():
 
 def get_question_by_id(id):
     question_list = get_question_list()
-    if len(question_list) <= id:
+    if len(question_list) < id:
         return f"There is no question with id:{id}."
     else:
         return question_list[id-1]
+
 
 def filter_question(question, headers=[]):
     data = []
@@ -37,11 +38,13 @@ def get_answers_by_id(id):
 
 
 def add_question(question):
+    print('EZ AZ: ', question)
     data = get_question_list()
     for header in QUESTION_HEADER:
         if header not in list(question.keys()):
             question[header] = fill_post(post_type='question', header=header)
     data.append(question)
+    print("Ezt skubizzátok: ", data)
     connection.write_file('question', data, header=QUESTION_HEADER)
 
 
