@@ -8,6 +8,8 @@ app = Flask(__name__)
 @app.route('/')
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
+    orber_by = id
+    order_direction = 'down'
     question_list = data_manager.get_question_list()
     return render_template('list.html', question_list=question_list, header=connection.QUESTION_HEADER)
 

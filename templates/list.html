@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>FastFox</title>
+<title>Fast Foxes</title>
 </head>
 <body>
-<h1>FastFox</h1>
+<h1>Fast Foxes</h1>
 <a href="{{ url_for('ask_question') }}">Ask a Question</a>
 <table>
     <thead>
         <tr>
             {%  for head in header %}
-                <th>{{ ' '.join(head.split('_')).title() }}</th>
+                <th>{{ ' '.join(head.split('_')).title() }} <form action="/list" methods=['GET','POST']></form></th>
             {%  endfor %}
         </tr>
          <tbody>

@@ -73,4 +73,7 @@ def generate_new_id(post_type):
         return len(get_answer_list())
 
 
+def sort_data(data, header, reversed):
+    sorted_list = sorted(data, key=lambda x: int(x[header]), reverse=reversed)
+    return sorted_list
 
