@@ -8,8 +8,8 @@ app = Flask(__name__)
 @app.route('/')
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
-    orber_by = id
-    order_direction = 'down'
+    # orber_by = id
+    # order_direction = 'down'
     question_list = data_manager.get_question_list()
     return render_template('list.html', question_list=question_list, header=connection.QUESTION_HEADER)
 
@@ -17,11 +17,20 @@ def list_questions():
 @app.route("/question/<int:id>", methods=['GET', 'POST'])
 def display_question(id):
     question = data_manager.get_question_by_id(id)
+    print("!!!!", question)
     header = ["title", "message"]
-    result = data_manager.filter_question(question, header)
+    result = data_manager.filter_question(question=question, headers=header)
     answer = data_manager.get_answers_by_id(id)
     return render_template('question.html', result=result, answer_list=answer, header=header, question_id=id)
 
+
+@app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
+def delete_question(question_id):
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_manager.add_question(result)
+        return redirect('/list')
+    return render_template('question.html')
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def ask_question():

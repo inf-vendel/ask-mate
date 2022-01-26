@@ -7,6 +7,7 @@
 <body>
 <h1>FastFox</h1>
 <a href="{{ url_for('list_questions') }}">Back to Main Page</a>
+
 <table>
 <h2>Question number {{ question_id }}</h2>
     <thead>
@@ -33,5 +34,6 @@
     </ol>
 </table>
 <a href="{{ url_for('post_answer', question_id=question_id)}}">Post an Answer</a>
+<a href="{{ url_for('delete_question', question_id=question_id) }}">Delete Question</a>
 </body>
 </html>

@@ -45,6 +45,18 @@ def add_question(question):
     connection.write_file('question', data, header=QUESTION_HEADER)
 
 
+def get_dict_from_list(list, key):
+    for i, k in enumerate(list):
+        if k[key] == question_id:
+            return i
+
+
+def delete_question(question_id):
+    question_list = get_question_list()
+    del question_list[get_dict_from_list(question_id, "id")]
+    connection.write_file('question', data, header=QUESTION_HEADER)
+
+
 def post_answer(answer, question_id):
     data = get_answer_list()
     answer['question_id'] = question_id
