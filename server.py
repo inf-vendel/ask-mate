@@ -12,7 +12,6 @@ app = Flask(__name__)
 def list_questions(order_by="id", order_direction="desc"):
     order_by = request.args.get('order_by')
     order_direction = request.args.get('order_direction')
-    print(order_by, order_direction)
     question_list = data_manager.get_question_list()
     list = data_manager.sort_data(question_list, order_by, order_direction) if order_by and order_direction else question_list
     return render_template('list.html',
@@ -51,7 +50,8 @@ def ask_question():
         file = request.files['image']
         if file:
             filename = secure_filename(file.filename)
-            file.save(os.path.join('images', filename))
+            file.save(os.path.join('static', filename))
+            result['image'] = filename
         data_manager.add_question(result)
         return redirect('/list')
     return render_template('ask.html')

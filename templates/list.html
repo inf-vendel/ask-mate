@@ -28,6 +28,10 @@
                 {% for key,value in question.items() %}
                     {% if key == 'id' %}
                         <td><a href="{{ url_for('display_question', id=question['id'])}}">{{ value }}</a></td>
+                    {% elif key == 'image' %}
+                        <td>
+                            <img src="{{ url_for('static', filename= value) }}" alt="uwu" height="100">
+                        </td>
                     {%  else %}
                         <td>{{ value }}</td>
                     {%  endif %}
