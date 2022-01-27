@@ -1,5 +1,5 @@
 id,submission_time,view_number,vote_number,title,message,image
-9,1234,0,0,aaaaaaaaaa,CASCASCASCASCA,
+9,1234,0,0,aaaaaaaaaa?,CASCASCASCASCAaaaa,
 8,1234,0,0,aaa,aaaa,
 7,1234,0,0,csaaaa,cs,cdcdcdcd2.jpg
 6,1234,0,0,How to checkout as remote branch in git? :-),"My friends created a new branch during a high-paying wotk but as you might guessed it it's no ue typing 'git branch', I can't see shit of their nelwy developed branches. It only shows mine? Any ideas? :'C

@@ -63,6 +63,16 @@ def post_answer(question_id):
     return render_template('new_answer.html', question_id=question_id)
 
 
+@app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
+def edit_question(question_id):
+    question = data_manager.get_question_by_id(question_id)
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_manager.edit_question(question_id, result)
+        return redirect(f'/question/{question_id}')
+    return render_template('edit_question.html', question_id=question_id, question=question)
+
+
 if __name__ == "__main__":
     app.run(
         port=5000,

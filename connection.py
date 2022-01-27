@@ -8,7 +8,7 @@ DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
 
 
 def read_file(data_field):
-    path = get_path(data_field)
+    path = data_field
     list = []
     with open(path, "r") as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
@@ -18,16 +18,10 @@ def read_file(data_field):
 
 
 def write_file(data_field, data, header):
-    path = get_path(data_field)
+    path = data_field
     with open(path, "w") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames = header)
         writer.writeheader()
         writer.writerows(data)
 
 
-def get_path(data_field):
-    global DATA_FIELD_PATH_1, DATA_FIELD_PATH_2
-    if data_field == 'question':
-        return DATA_FIELD_PATH_1
-    else:
-        return DATA_FIELD_PATH_2
