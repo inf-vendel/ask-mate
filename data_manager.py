@@ -24,7 +24,6 @@ def get_question_by_id(id):
 
 
 def filter_question(question, headers=[]):
-    print(type(question))
     data = []
     for item in headers:
         data.append(question[item])
@@ -50,6 +49,7 @@ def add_question(question):
 
 
 def get_dict_from_list(list, head, id):
+    # Where head == id in the list's dict is true.
     for i, question in enumerate(list):
         if int(question[head]) == id:
             return i
@@ -101,7 +101,8 @@ def generate_new_id(post_type):
 
 
 def sort_data(data, header, reversed):
-    sorted_list = sorted(data, key=lambda x: int(x[header]), reverse=reversed)
+    dir = True if reversed == "asc" else False
+    sorted_list = sorted(data, key=lambda x: x[header], reverse=dir)
     return sorted_list
 
 
@@ -115,3 +116,22 @@ def edit_question(question_id, new_question_data):
     question_list[element] = question
     connection.write_file('sample_data/question.csv', question_list, header=QUESTION_HEADER)
 
+
+def get_answer_by_id(id):
+    answers = get_answer_list()
+    i = get_dict_from_list(answers, "id", id)
+    return answers[i]
+
+
+def vote_message(id, dataset, vote):
+    id = int(id)
+    if dataset == 'question':
+        data = get_question_list()
+        message = get_question_by_id(id)
+    elif dataset == 'answer':
+        data = get_answer_list()
+        message = get_answer_by_id(id)
+    message['vote_number'] = int(message['vote_number']) + vote
+    element = get_dict_from_list(data, 'id', id)
+    data[element] = message
+    connection.write_file('sample_data/answer.csv', data, header=ANSWER_HEADER)

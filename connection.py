@@ -12,7 +12,7 @@ def read_file(data_field):
     list = []
     with open(path, "r") as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
-        for row in reader:
+        for iter, row in enumerate(reader):
             list.append(row)
     return list
 

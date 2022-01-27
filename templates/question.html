@@ -28,7 +28,10 @@
 <h2>Answers</h2>
     <ol>
         {% for answer in answer_list %}
-            <li>{{ answer["message"] }} <a href="{{ url_for('delete_answer', answer_id=answer["id"], question_id=question_id) }}">Delete Answer</a></li>
+            <li>
+            {{ answer["message"] }} <a href="{{ url_for('delete_answer', answer_id=answer["id"], question_id=question_id) }}">Delete Answer</a>
+            <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id'])}}">▲</a> <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id'])}}">▼</a> ({{ answer["vote_number"] }})
+            </li>
         {% endfor %}
     </ol>
 </table>

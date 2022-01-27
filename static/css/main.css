@@ -1,8 +1,18 @@
 body {
-  background-color: lightblue;
+  background-color: rgb(252, 250, 249);
 }
 
 h1 {
   color: navy;
   margin-left: 20px;
+}
+a:hover {
+  font-size: large;
+  background-color: rgba(180, 240, 172, 50);
+}
+
+tr:hover {
+  border-radius: 10px;
+  background: lightblue;
+  color: rgb(40, 40, 0);
 }

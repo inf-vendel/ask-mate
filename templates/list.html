@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
 <meta charset="UTF-8">
 <title>Fast Foxes</title>
 </head>
@@ -11,7 +13,13 @@
     <thead>
         <tr>
             {%  for head in header %}
-                <th>{{ ' '.join(head.split('_')).title() }} <form action="/list" methods=['GET','POST']></form></th>
+                <th>
+
+                    {{ ' '.join(head.split('_')).title() }} <form action="/list" methods=['GET','POST']></form>
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='asc')}}">▲</a>
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='desc')}}">▼</a>
+                </th>
+
             {%  endfor %}
         </tr>
          <tbody>
@@ -24,6 +32,10 @@
                         <td>{{ value }}</td>
                     {%  endif %}
                 {% endfor %}
+                    <td>
+                        <a href="{{ url_for('vote_up_question', question_id=question['id'])}}">▲</a>
+                        <a href="{{ url_for('vote_down_question', question_id=question['id'])}}">▼</a>
+                    </td>
                 </tr>
             {% endfor %}
 </tbody>

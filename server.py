@@ -9,11 +9,12 @@ app = Flask(__name__)
 
 @app.route('/')
 @app.route("/list", methods=['GET', 'POST'])
-def list_questions():
-    # orber_by = id
-    # order_direction = 'down'
+def list_questions(order_by="title", order_direction="desc"):
+    order_by = order_by
     question_list = data_manager.get_question_list()
-    return render_template('list.html', question_list=question_list, header=connection.QUESTION_HEADER)
+    list = data_manager.sort_data(question_list, order_by, order_direction)
+    return render_template('list.html',
+                           question_list=list, header=connection.QUESTION_HEADER)
 
 
 @app.route("/question/<int:id>", methods=['GET', 'POST'])
@@ -71,6 +72,31 @@ def edit_question(question_id):
         data_manager.edit_question(question_id, result)
         return redirect(f'/question/{question_id}')
     return render_template('edit_question.html', question_id=question_id, question=question)
+
+
+@app.route("/question/<question_id>/vote_up", methods=['GET', 'POST'])
+def vote_up_question(question_id):
+    data_manager.vote_message(question_id, 'question', vote = 1)
+    return redirect('/list')
+
+
+@app.route("/question/<question_id>/vote_down", methods=['GET', 'POST'])
+def vote_down_question(question_id):
+    data_manager.vote_message(question_id, 'question', vote = -1)
+    return redirect('/list')
+
+
+@app.route("/question/<int:question_id>/answer/<answer_id>/vote_up", methods=['GET', 'POST'])
+def vote_up_answer(answer_id, question_id):
+    data_manager.vote_message(answer_id, 'answer', vote = 1)
+    return redirect(f'/question/{question_id}')
+
+
+@app.route("/question/<int:question_id>/answer/<answer_id>/vote_down", methods=['GET', 'POST'])
+def vote_down_answer(answer_id, question_id):
+    data_manager.vote_message(answer_id, 'answer', vote = -1)
+    return redirect(f'/question/{question_id}')
+
 
 
 if __name__ == "__main__":
