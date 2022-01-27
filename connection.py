@@ -12,9 +12,9 @@ def read_file(data_field):
     list = []
     with open(path, "r") as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
-        for iter, row in enumerate(reader):
+        for row in reader:
             list.append(row)
-    return list
+    return convert_to_integer(list, ["id", "vote_number", "view_number", "submission_time"])
 
 
 def write_file(data_field, data, header):
@@ -25,3 +25,12 @@ def write_file(data_field, data, header):
         writer.writerows(data)
 
 
+def convert_to_integer(data, header):
+    for head in header:
+        for i, arr in enumerate(data):
+            try:
+                data[i][head] = int(data[i][head])
+            except KeyError or ValueError:
+                pass
+
+    return data

@@ -5,6 +5,7 @@ ANSWER_HEADER = ["id","submission_time","vote_number","question_id","message","i
 DATA_FIELD_PATH_1 = 'sample_data/question.csv'
 DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
 
+
 def get_question_list():
     question_list = connection.read_file('sample_data/question.csv')
     sorted_list = sorted(question_list, key=lambda x: int(x['id']), reverse=True)
@@ -128,10 +129,16 @@ def vote_message(id, dataset, vote):
     if dataset == 'question':
         data = get_question_list()
         message = get_question_by_id(id)
+        message['vote_number'] = int(message['vote_number']) + vote
+        element = get_dict_from_list(data, 'id', id)
+        data[element] = message
+        connection.write_file('sample_data/question.csv', data, header=QUESTION_HEADER)
     elif dataset == 'answer':
         data = get_answer_list()
         message = get_answer_by_id(id)
-    message['vote_number'] = int(message['vote_number']) + vote
-    element = get_dict_from_list(data, 'id', id)
-    data[element] = message
-    connection.write_file('sample_data/answer.csv', data, header=ANSWER_HEADER)
+        message['vote_number'] = int(message['vote_number']) + vote
+        element = get_dict_from_list(data, 'id', id)
+        data[element] = message
+        connection.write_file('sample_data/answer.csv', data, header=ANSWER_HEADER)
+
+

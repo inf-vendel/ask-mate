@@ -9,10 +9,12 @@ app = Flask(__name__)
 
 @app.route('/')
 @app.route("/list", methods=['GET', 'POST'])
-def list_questions(order_by="title", order_direction="desc"):
-    order_by = order_by
+def list_questions(order_by="id", order_direction="desc"):
+    order_by = request.args.get('order_by')
+    order_direction = request.args.get('order_direction')
+    print(order_by, order_direction)
     question_list = data_manager.get_question_list()
-    list = data_manager.sort_data(question_list, order_by, order_direction)
+    list = data_manager.sort_data(question_list, order_by, order_direction) if order_by and order_direction else question_list
     return render_template('list.html',
                            question_list=list, header=connection.QUESTION_HEADER)
 
