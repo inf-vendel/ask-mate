@@ -1,20 +1,63 @@
 id,submission_time,view_number,vote_number,title,message,image
-13,1234,0,0,gg,ggg,cdcdcdcd2_.png
+14,1234,0,0,Which one is better? Stackoverflow or FastFoxes?,"Me and my girlfriend had an argument about this,help me settle this debate!!!!!",
+13,1234,0,0,"Why are not reproducible/typo flags listed under ""needs improvement""?","When you flag a question that was caused by a simple typo mistake, the option is listed under ""needs improvement"" which says:
+
+""This question needs updates from the author in order to be answered well or belongs on another Stack Exchange site.""
+
+However, typo mistakes which are the root cause of an entire question cannot be edited to improve said question, and the only course of action is to either close/delete it.
+
+So, why is the option for ""Not reproducible or was caused by a typo"" listed under the ""needs improvement"" section? Shouldn't it simply be in the initial prompt window as it's own category?
+
+And while were at it roasting the flagging prompt:
+
+Why is duplicate listed on the initial flag prompt and also in the needs improvement section?
+Why does clicking the duplicate option on the initial prompt and then clicking the back button take you to the needs improvement section? Back implies it will take you to the previous menu you were at.
+Why do the initial flag prompt's options start in lower case and the needs improvment options start in upper case?",cdcdcdcd2_.png
 12,1234,0,0,ahw4,hw4th,
-11,1234,0,0,aaaaa,a,
-10,1234,0,-7,CSke,wh4etj5ru6tiu,
-9,1234,0,43,A Webmodul egy szar?,Minden csak bugos pls kill me now.,
-8,1234,0,3,aaa,aaaa,
+11,1234,0,0,Python dictionary creation error,So I am wondering why the first method using append works but the second method doesn't work? Is there a difference between myList and myList2?,
+10,1234,0,-7,Is it possible to see someone’s tears underwater?,Do you know?,
+9,1234,0,43,This website is a load of crap?,I don't know how to use this website,
+8,1234,0,3,Can you walk in deep water with waterproof clothing?,"As stupid as this sounds, if I was to wear Gore-Tex trousers and boots and then place Gore-Tex gaiters over the boots/trousers bridging them together, could I wade into water up to my waist?
+
+What defines 'waterproof' is being able to submerge an apparel into water and on the inside it being dry. Trousers, boots and gaiters all made of Gore-Tex which are labelled as being waterproof should in theory block out all water from the feet to waist if they are interlocked with one another?
+
+If water did drop down under the gaiter, because the cuff of the trouser sits over the boot, the water should roll past over the boot? However, even though gaiters are tightly wrapped around the lace of boots, they aren't 100% completely sealed off. My question is, would water travel underneath the bottom of the gaiters?",
 7,1234,0,5,csaaaa,cs,cdcdcdcd2.jpg
 6,1234,0,2,How to checkout as remote branch in git? :-),"My friends created a new branch during a high-paying wotk but as you might guessed it it's no ue typing 'git branch', I can't see shit of their nelwy developed branches. It only shows mine? Any ideas? :'C
 
 Also sorry for my bad English. uwu",
-5,1234,0,16,baba,aaaa,
-4,1493015432,1364,63,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.
+5,1234,0,16,Trouble decoding some special characters &#146; &#147; &#148;,"I'm trying to decode some special characters in php and can't seem to find a way to do it.
 
-This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",
-3,1234,0,5,a,a,
-2,1493068124,15,9,Wordpress loading multiple jQuery Versions,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $('.myBook').booklet();
+ $str = 'Thi&#146;s i""s a&#146;n e&#148;xa&#147;mple';
+This just returns some dots.
+
+$str = preg_replace_callback(""/(&#[0-9]+;)/"", function($m) {
+    return mb_convert_encoding($m[1], ""UTF-8"", ""HTML-ENTITIES"");
+}, $str);
+Some other tests just return the same string.
+
+$str = html_entity_decode($str, ENT_QUOTES, 'UTF-8');
+$str = htmlspecialchars_decode($str, ENT_QUOTES);
+Anyway, I've been trying all sorts of combinations but really no idea how to convert this to UTF-8 characters.
+
+What I'm expecting to see is this:
+
+Thi’s i""s a’n e”xa“mple
+And actually if I take this directly and use htmlentities to encode it I see different characters to begin with.
+
+Thi&rsquo;s i&quot;s a&rsquo;n e&rdquo;xa&ldquo;mple
+Unfortunately I don't have control of the source and I'm stuck dealing with those characters.
+
+Are they non standard, do I need to replace them manually with my own lookup table?
+
+EDIT
+
+Looking at this table here: https://brajeshwar.github.io/entities/
+
+I see the characters I'm looking after are not listed. When I test a few characters from this table they decode just fine. I guess the list in php is incomplete by default?",
+4,1493015432,1364,63,"Error when ""import matplotlib.pyplot as plt""","I am very new to python. So, my problem might be too simple to be solved. But I cannot. Please help me! I did not have any problem to use ""plt"", but it suddenly shows error message and does not work, when I import it. Please see the below.",
+3,1234,0,5,UTF-8 String decoding in Python,"In a project I need a PHP and a Python module (Python 3.5.2). As well as a configfile which both modules use. The Python configparser has problems reading special characters from the configfile, like german mutated vowel (ä,ö,ü, e.g.). From the PHP side I use the utf-8 encoding to bypass the problem.What do I have do to do to decode my String?",
+2,1493068124,15,9,How do you apply CSS to HTML?,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $('.myBook').booklet();
 
 I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine.
 
@@ -24,4 +67,3 @@ jquery
 booklet
 app.js (bundled file with webpack, including jquery)",images/image1.png
 1,1493368154,29,8,How to make lists in Python?,"I am totally new to this, any hints?",
-14,1234,0,0,Whats up?,its me,
