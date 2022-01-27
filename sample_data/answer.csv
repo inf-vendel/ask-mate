@@ -1,7 +1,1 @@
-id,submission_time,vote_number,question_id,message,image
-0,0,0,1,kurva,
-1,1234,6,9,Kurva anyád,
-2,1234,0,7,Az isten basszon meg!,
-3,1234,3,10,rthjkl,
-4,1234,-8,11,nem.,
-5,1234,0,11,yes,
+id,submission_time,vote_number,question_id,message,image0,0,0,1,kurva,1,1234,6,9,Kurva anyd,2,1234,0,7,Az isten basszon meg!,3,1234,3,10,rthjkl,4,1234,-8,11,nem.,5,1234,0,11,yes,
