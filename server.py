@@ -100,7 +100,6 @@ def vote_down_answer(answer_id, question_id):
     return redirect(f'/question/{question_id}')
 
 
-
 if __name__ == "__main__":
     app.run(
         port=5000,
