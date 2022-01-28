@@ -1,10 +1,7 @@
 id,submission_time,view_number,vote_number,title,message,image
-12,1234,0,0,ahw4,hw4th,
-11,1234,0,0,aaaaa,a,
-10,1234,0,-7,CSke,wh4etj5ru6tiu,
-9,1234,0,43,A Webmodul egy szar?,Minden csak bugos pls kill me now.,
-8,1234,0,3,aaa,aaaa,
-7,1234,0,5,csaaaa,cs,cdcdcdcd2.jpg
+14,1234,0,3,Can't reach the value of a dict.,"It gives a KeyError.
+
+It happens in Python 3.6",
 6,1234,0,2,How to checkout as remote branch in git? :-),"My friends created a new branch during a high-paying wotk but as you might guessed it it's no ue typing 'git branch', I can't see shit of their nelwy developed branches. It only shows mine? Any ideas? :'C
 
 Also sorry for my bad English. uwu",
@@ -23,4 +20,3 @@ jquery
 booklet
 app.js (bundled file with webpack, including jquery)",images/image1.png
 1,1493368154,29,8,How to make lists in Python?,"I am totally new to this, any hints?",
-13,1234,0,0,gg,ggg,cdcdcdcd2_.png
