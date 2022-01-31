@@ -76,15 +76,21 @@ def edit_question(question_id):
     return render_template('edit_question.html', question_id=question_id, question=question)
 
 
-@app.route("/question/<question_id>/vote_up", methods=['GET', 'POST'])
-def vote_up_question(question_id):
-    data_manager.vote_message(question_id, 'question', vote = 1)
-    return redirect('/list')
+# @app.route("/question/<question_id>/vote_up", methods=['GET', 'POST'])
+# def vote_up_question(question_id):
+#     data_manager.vote_message(question_id, 'question', vote = 1)
+#     return redirect('/list')
+#
+#
+# @app.route("/question/<question_id>/vote_down", methods=['GET', 'POST'])
+# def vote_down_question(question_id):
+#     data_manager.vote_message(question_id, 'question', vote = -1)
+#     return redirect('/list')
+#
 
-
-@app.route("/question/<question_id>/vote_down", methods=['GET', 'POST'])
-def vote_down_question(question_id):
-    data_manager.vote_message(question_id, 'question', vote = -1)
+@app.route('/question/<question_id>/<vote_type>')
+def vote_question(question_id, vote_type):
+    data_manager.vote_message(question_id, 'question', vote=int(vote_type))
     return redirect('/list')
 
 

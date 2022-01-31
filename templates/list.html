@@ -37,8 +37,8 @@
                     {%  endif %}
                 {% endfor %}
                     <td>
-                        <a href="{{ url_for('vote_up_question', question_id=question['id'])}}">▲</a>
-                        <a href="{{ url_for('vote_down_question', question_id=question['id'])}}">▼</a>
+                        <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1)}}">▲</a>
+                        <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1)}}">▼</a>
                     </td>
                 </tr>
             {% endfor %}
