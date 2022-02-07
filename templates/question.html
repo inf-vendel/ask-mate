@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FastFox</title>
+</head>
+<body>
+<h1>FastFox</h1>
+<a href="{{ url_for('list_questions') }}">Back to Main Page</a>
+<table>
+    <h2>Question number {{ question_id }}</h2>
+    <thead>
+        <tr>
+            {%  for head in header %}
+                <th>{{ ' '.join(head.split('_')).title() }}</th>
+            {%  endfor %}
+        </tr>
+            <tbody>
+                <tr>
+                {% for value in result %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+                </tr>
+            </tbody>
+    </thead>
+</table>
+<table>
+<h2>Answers</h2>
+    <ol>
+        {% for answer in answer_list %}
+            <li>
+            {{ answer["message"] }} <a href="{{ url_for('delete_answer', answer_id=answer["id"], question_id=question_id) }}">Delete Answer</a>
+            <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id'])}}">▲</a> <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id'])}}">▼</a> ({{ answer["vote_number"] }})
+            </li>
+        {% endfor %}
+    </ol>
+</table>
+<a href="{{ url_for('post_answer', question_id=question_id)}}">Post an Answer</a>
+<a href="{{ url_for('delete_question', question_id=question_id) }}">Delete Question</a>
+<a href="{{ url_for('edit_question', question_id=question_id) }}">Edit Question</a>
+</body>
+</html>

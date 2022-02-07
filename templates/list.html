@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+<meta charset="UTF-8">
+<title>Fast Foxes</title>
+</head>
+<body>
+<h1>Fast Foxes</h1>
+<a href="{{ url_for('ask_question') }}">Ask a Question</a>
+<table>
+    <thead>
+        <tr>
+            {%  for head in header %}
+                <th>
+
+                    {{ ' '.join(head.split('_')).title() }} <form action="/list" methods=['GET','POST']></form>
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='asc')}}">▲</a>
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='desc')}}">▼</a>
+                </th>
+
+            {%  endfor %}
+        </tr>
+         <tbody>
+            {% for question in question_list %}
+                <tr>
+                {% for key,value in question.items() %}
+                    {% if key == 'id' %}
+                        <td><a href="{{ url_for('display_question', id=question['id'])}}">{{ value }}</a></td>
+                    {% elif key == 'image' %}
+                        <td>
+                            <img src="{{ url_for('static', filename= value) }}" alt="uwu" height="100">
+                        </td>
+                    {%  else %}
+                        <td>{{ value }}</td>
+                    {%  endif %}
+                {% endfor %}
+                    <td>
+                        <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1)}}">▲</a>
+                        <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1)}}">▼</a>
+                    </td>
+                </tr>
+            {% endfor %}
+</tbody>
+    </thead>
+</table>
+</body>
+</html>
