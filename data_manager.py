@@ -6,7 +6,7 @@ import database_common
 
 
 QUESTION_HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
-ANSWER_HEADER = ["id","submission_time","vote_number","question_id","message","image"]
+ANSWER_HEADER = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
 DATA_FIELD_PATH_1 = 'sample_data/question.csv'
 DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
 
