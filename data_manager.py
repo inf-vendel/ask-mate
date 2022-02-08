@@ -1,4 +1,9 @@
 import connection
+from typing import List, Dict
+from psycopg2 import sql
+from psycopg2.extras import RealDictCursor
+import database_common
+
 
 QUESTION_HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
 ANSWER_HEADER = ["id","submission_time","vote_number","question_id","message","image"]
@@ -6,41 +11,48 @@ DATA_FIELD_PATH_1 = 'sample_data/question.csv'
 DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
 
 
-def get_question_list():
-    question_list = connection.read_file('sample_data/question.csv')
-    sorted_list = sorted(question_list, key=lambda x: int(x['id']), reverse=True)
-    return sorted_list
+@database_common.connection_handler
+def get_question_list(cursor):
+    query = """SELECT * FROM question;"""
+    cursor.execute(query)
+    return cursor.fetchall()
 
 
-def get_answer_list():
-    answer_list = connection.read_file('sample_data/answer.csv')
-    return answer_list
+@database_common.connection_handler
+def get_answer_list(cursor):
+    query = """SELECT * FROM answers"""
+    cursor.execute(query)
+    return cursor.fetchall()
 
 
-def get_question_by_id(id):
-    id = int(id)
-    question_list = get_question_list()
-    question_i = get_dict_from_list(question_list, "id", id)
-    return question_list[question_i]
+@database_common.connection_handler
+def get_question_by_id(cursor, id):
+    query = """SELECT * FROM questions 
+                WHERE id=%(id)s"""
+    data = {'id': id}
+    cursor.execute(query, data)
+    return cursor.fetchall()
 
 
-def filter_question(question, headers=[]):
+@database_common.connection_handler
+def filter_question(cursor, question, headers=[]):
     data = []
     for item in headers:
         data.append(question[item])
     return data
 
 
-def get_answers_by_id(id):
-    answer_list = get_answer_list()
-    if id in [int(answer['question_id']) for answer in answer_list]:
-        answers = [answer for answer in answer_list if int(answer['question_id']) == id]
-        return answers
-    else:
-        return []
+@database_common.connection_handler
+def get_answers_by_id(cursor, id):
+    query = """SELECT * FROM answers 
+                    WHERE id=%(id)s"""
+    data = {'id': id}
+    cursor.execute(query, data)
+    return cursor.fetchall()
 
 
-def add_question(question):
+@database_common.connection_handler
+def add_question(cursor, question):
     data = get_question_list()
     for header in QUESTION_HEADER:
         if header not in list(question.keys()):
@@ -49,13 +61,15 @@ def add_question(question):
     connection.write_file('sample_data/question.csv', data, header=QUESTION_HEADER)
 
 
-def get_dict_from_list(list, head, id):
+@database_common.connection_handler
+def get_dict_from_list(cursor, list, head, id):
     # Where head == id in the list's dict is true.
     for i, question in enumerate(list):
         if int(question[head]) == id:
             return i
 
 
+@database_common.connection_handler
 def delete_question(question_id):
     question_list = get_question_list()
     id = int(question_id)
@@ -63,6 +77,7 @@ def delete_question(question_id):
     connection.write_file('sample_data/question.csv', question_list, header=QUESTION_HEADER)
 
 
+@database_common.connection_handler
 def delete_answer(id):
     answers = get_answer_list()
     id = int(id)
@@ -70,6 +85,7 @@ def delete_answer(id):
     connection.write_file('sample_data/answer.csv', answers, header=ANSWER_HEADER)
 
 
+@database_common.connection_handler
 def post_answer(answer, question_id):
     data = get_answer_list()
     answer['question_id'] = question_id
@@ -80,6 +96,7 @@ def post_answer(answer, question_id):
     connection.write_file('sample_data/answer.csv', data, header=ANSWER_HEADER)
 
 
+@database_common.connection_handler
 def fill_post(post_type, header):
     if header == 'id':
         return generate_new_id(post_type)
@@ -91,6 +108,7 @@ def fill_post(post_type, header):
         return 0
 
 
+@database_common.connection_handler
 def generate_new_id(post_type):
     arr = get_question_list() if post_type == 'question' else get_answer_list()
     ids = [int(q['id']) for q in arr]
@@ -101,12 +119,14 @@ def generate_new_id(post_type):
         return new_id
 
 
+@database_common.connection_handler
 def sort_data(data, header, reversed):
     dir = True if reversed == "asc" else False
     sorted_list = sorted(data, key=lambda x: x[header], reverse=dir)
     return sorted_list
 
 
+@database_common.connection_handler
 def edit_question(question_id, new_question_data):
     question_list = get_question_list()
     id = int(question_id)
@@ -118,12 +138,14 @@ def edit_question(question_id, new_question_data):
     connection.write_file('sample_data/question.csv', question_list, header=QUESTION_HEADER)
 
 
+@database_common.connection_handler
 def get_answer_by_id(id):
     answers = get_answer_list()
     i = get_dict_from_list(answers, "id", id)
     return answers[i]
 
 
+@database_common.connection_handler
 def vote_message(id, dataset, vote):
     id = int(id)
     if dataset == 'question':
