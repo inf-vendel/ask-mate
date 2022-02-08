@@ -96,14 +96,26 @@ def vote_question(question_id, vote_type):
 
 @app.route("/question/<int:question_id>/answer/<answer_id>/vote_up", methods=['GET', 'POST'])
 def vote_up_answer(answer_id, question_id):
-    data_manager.vote_message(answer_id, 'answer', vote = 1)
+    data_manager.vote_message(answer_id, 'answer', vote=1)
     return redirect(f'/question/{question_id}')
 
 
 @app.route("/question/<int:question_id>/answer/<answer_id>/vote_down", methods=['GET', 'POST'])
 def vote_down_answer(answer_id, question_id):
-    data_manager.vote_message(answer_id, 'answer', vote = -1)
+    data_manager.vote_message(answer_id, 'answer', vote=-1)
     return redirect(f'/question/{question_id}')
+
+
+@app.route("/question/<question_id>/new-comment", methods=['GET', 'POST'])
+def add_comment_to_question(question_id):
+    if request.method == 'POST':
+        return redirect(f'/question/{question_id}')
+
+
+@app.route("/answer/<answer_id>/new-comment", methods=['GET', 'POST'])
+def add_comment_to_answer(answer_id, question_id):
+    if request.method == 'POST':
+        return redirect(f'/question/{question_id}')
 
 
 if __name__ == "__main__":
