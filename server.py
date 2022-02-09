@@ -23,6 +23,7 @@ def display_question(id):
     question = data_manager.get_question_by_id(id)
     header = ['title', 'message']
     answer = data_manager.get_answers_by_id(id)
+    data_manager.count_view(id)
     return render_template('question.html', result=question[0], answer_list=answer, header=header, question_id=id)
 
 

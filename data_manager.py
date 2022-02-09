@@ -148,14 +148,21 @@ def get_answer_by_id(id):
 
 
 @database_common.connection_handler
+def count_view(cursor, id):
+    query = f"SELECT view_number FROM question WHERE id = {id}"
+    cursor.execute(query)
+    view_number = (realdict_to_dict(cursor.fetchall()))[0]['view_number'] + 1
+    query = f"""UPDATE question SET view_number = {view_number} WHERE id = {id};"""
+    cursor.execute(query)
+
+
+@database_common.connection_handler
 def vote_message(cursor, id, dataset, vote):
     id = int(id)
     query = f"SELECT vote_number FROM {dataset} WHERE id = {id}"
     cursor.execute(query)
     vote_number = (realdict_to_dict(cursor.fetchall()))[0]['vote_number'] + vote
-    print(f'----!!  {type(vote_number)}  !!-----')
     query = f"""UPDATE {dataset} SET vote_number = {vote_number} WHERE id = {id};"""
-    print('__________________________',query)
     cursor.execute(query)
 
 
