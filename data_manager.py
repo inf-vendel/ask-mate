@@ -54,7 +54,7 @@ def get_answers_by_id(cursor, id):
 @database_common.connection_handler
 def add_question(cursor, question):
     query = f"""INSERT INTO question (submission_time,view_number,vote_number,title,message,image) 
-    VALUES (CURRENT_TIMESTAMP, 0, 0, {question['title']}, {question['message']}, {question['image']})"""
+    VALUES (CURRENT_TIMESTAMP, 0, 0, '{question['title']}', '{question['message']}', '{question['image']}')"""
     data = {'question': question['title']}
     cursor.execute(query, data)
 
