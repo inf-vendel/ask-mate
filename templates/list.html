@@ -1,48 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-<meta charset="UTF-8">
-<title>Fast Foxes</title>
+    <meta charset="UTF-8">
+    <title>Fast Foxes</title>
 </head>
 <body>
 <h1>Fast Foxes</h1>
 <a href="{{ url_for('ask_question') }}">Ask a Question</a>
+
 <table>
     <thead>
+    <tr>
+        {% for head in header %}
+            <th>
+
+                {{ ' '.join(head.split('_')).title() }}
+                <form action="/list" methods=['GET','POST']></form>
+                <a href="{{ url_for('list_questions', order_by=head, order_direction='asc') }}">▲</a>
+                <a href="{{ url_for('list_questions', order_by=head, order_direction='desc') }}">▼</a>
+            </th>
+
+        {% endfor %}
+    </tr>
+    <tbody>
+    {% for question in question_list %}
         <tr>
-            {%  for head in header %}
-                <th>
-
-                    {{ ' '.join(head.split('_')).title() }} <form action="/list" methods=['GET','POST']></form>
-                    <a href="{{ url_for('list_questions', order_by=head, order_direction='asc')}}">▲</a>
-                    <a href="{{ url_for('list_questions', order_by=head, order_direction='desc')}}">▼</a>
-                </th>
-
-            {%  endfor %}
-        </tr>
-         <tbody>
-            {% for question in question_list %}
-                <tr>
-                {% for key,value in question.items() %}
-                    {% if key == 'id' %}
-                        <td><a href="{{ url_for('display_question', id=question['id'])}}">{{ value }}</a></td>
-                    {% elif key == 'image' %}
-                        <td>
-                            <img src="{{ url_for('static', filename= 'cdcdcdcd2.jpg') }}" alt="uwu" height="100">
-                        </td>
-                    {%  else %}
-                        <td>{{ value }}</td>
-                    {%  endif %}
-                {% endfor %}
+            {% for key,value in question.items() %}
+                {% if key == 'id' %}
+                    <td><a href="{{ url_for('display_question', id=question['id']) }}">{{ value }}</a></td>
+                {% elif key == 'image' %}
                     <td>
-                        <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1)}}">▲</a>
-                        <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1)}}">▼</a>
+                        <img src="{{ url_for('static', filename= 'cdcdcdcd2.jpg') }}" alt="uwu" height="100">
                     </td>
-                </tr>
+                {% else %}
+                    <td>{{ value }}</td>
+                {% endif %}
             {% endfor %}
-</tbody>
+            <td>
+                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}">👍</a>
+                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}">👎</a>
+                <form action="/question/{{ question_id }}/new-comment" method="POST">
+                    <p>
+                        <textarea name="search" type="text" required></textarea>
+                    </p>
+                    <p>
+                        <button type="submit">Add comment</button>
+                    </p>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    <h2>Search something</h2>
+    <form action="/search?q=<str:search phrase>" method="POST">
+        <p>
+            <textarea name="search" type="text" required></textarea>
+        </p>
+        <p>
+            <button type="submit">Search</button>
+        </p>
+    </form>
+    </tbody>
     </thead>
 </table>
 </body>

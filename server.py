@@ -106,16 +106,23 @@ def vote_down_answer(answer_id, question_id):
     return redirect(f'/question/{question_id}')
 
 
-@app.route("/question/<question_id>/new-comment", methods=['GET', 'POST'])
+@app.route("/question/<int:question_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_question(question_id):
     if request.method == 'POST':
         return redirect(f'/question/{question_id}')
 
 
-@app.route("/answer/<answer_id>/new-comment", methods=['GET', 'POST'])
+@app.route("/answer/<int:answer_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_answer(answer_id, question_id):
     if request.method == 'POST':
         return redirect(f'/question/{question_id}')
+
+
+# @app.route('/search?q=<str:search phrase>')
+# def search():
+#     return render_template('question.html')
+
+
 
 
 if __name__ == "__main__":
