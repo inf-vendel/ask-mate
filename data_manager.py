@@ -20,32 +20,39 @@ def get_question_list(cursor):
 
 @database_common.connection_handler
 def get_answer_list(cursor):
-    query = """SELECT * FROM answers"""
+    query = """SELECT * FROM answer"""
     cursor.execute(query)
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_question_by_id(cursor, id):
-    query = """SELECT * FROM questions 
-                WHERE id=%(id)s"""
+    query = f"""SELECT title, message FROM question 
+                WHERE id={id}"""
     data = {'id': id}
     cursor.execute(query, data)
-    return cursor.fetchall()
+    cur = cursor.fetchall()
+    return realdict_to_dict(cur)
 
 
-@database_common.connection_handler
-def filter_question(cursor, question, headers=[]):
+def filter_question(question, headers=[]):
     data = []
+
     for item in headers:
         data.append(question[item])
     return data
 
+def realdict_to_dict(d):
+    new_d = []
+    for row in d:
+        new_d.append(dict(row))
+    return new_d
+
 
 @database_common.connection_handler
 def get_answers_by_id(cursor, id):
-    query = """SELECT * FROM answer 
-                    WHERE id=%(id)s"""
+    query = f"""SELECT * FROM answer 
+                    WHERE question_id='{id}'"""
     data = {'id': id}
     cursor.execute(query, data)
     return cursor.fetchall()
@@ -57,7 +64,6 @@ def add_question(cursor, question):
     VALUES (CURRENT_TIMESTAMP, 0, 0, '{question['title']}', '{question['message']}', '{question['image']}')"""
     data = {'question': question['title']}
     cursor.execute(query, data)
-
 
 
 @database_common.connection_handler

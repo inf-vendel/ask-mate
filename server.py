@@ -21,10 +21,9 @@ def list_questions(order_by="id", order_direction="desc"):
 @app.route("/question/<int:id>", methods=['GET', 'POST'])
 def display_question(id):
     question = data_manager.get_question_by_id(id)
-    header = ["title", "message"]
-    result = data_manager.filter_question(question=question, headers=header)
+    header = ['title', 'message']
     answer = data_manager.get_answers_by_id(id)
-    return render_template('question.html', result=result, answer_list=answer, header=header, question_id=id)
+    return render_template('question.html', result=question[0], answer_list=answer, header=header, question_id=id)
 
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
@@ -53,7 +52,7 @@ def ask_question():
             file.save(os.path.join('static', filename))
             result['image'] = filename
         else:
-            result['image'] = "kola"
+            result['image'] = "no-image-icon-0.jpg"
         data_manager.add_question(result)
 
         return redirect('/list')
