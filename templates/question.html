@@ -33,7 +33,7 @@
             {{ answer["message"] }} <a href="{{ url_for('delete_answer', answer_id=answer['id'], question_id=question_id) }}">Delete Answer</a>
             <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id'])}}">👍</a>
             <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id'])}}">👎</a> ({{ answer["vote_number"] }})
-{#            <a href="{{ url_for('add_comment_to_answer', question_id=question_id, answer_id=answer['id']) }}">Comment</a>#}
+            <a href="{{ url_for('add_comment_to_answer', question_id=question_id, answer_id=answer['id']) }}">Comment</a>
             </li>
         {% endfor %}
     </ol>

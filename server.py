@@ -63,6 +63,13 @@ def ask_question():
 def post_answer(question_id):
     if request.method == 'POST':
         result = request.form.to_dict()
+        file = request.files['image']
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join('static', filename))
+            result['image'] = filename
+        else:
+            result['image'] = "no-image-icon-0.jpg"
         data_manager.post_answer(result, question_id=question_id)
         return redirect(f'/question/{question_id}')
     return render_template('new_answer.html', question_id=question_id)

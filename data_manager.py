@@ -91,14 +91,11 @@ def delete_answer(id):
 
 
 @database_common.connection_handler
-def post_answer(answer, question_id):
-    data = get_answer_list()
-    answer['question_id'] = question_id
-    for header in ANSWER_HEADER:
-        if header not in list(answer.keys()):
-            answer[header] = fill_post(post_type='answer', header=header)
-    data.append(answer)
-    connection.write_file('sample_data/answer.csv', data, header=ANSWER_HEADER)
+def post_answer(cursor, answer, question_id):
+    query = f"""INSERT INTO answer (submission_time,vote_number,question_id,message,image) 
+        VALUES (CURRENT_TIMESTAMP, 0, '{question_id}', '{answer['message']}', '{answer['image']}')"""
+    data = {'question_id': question_id, 'answer': answer}
+    cursor.execute(query, data)
 
 
 @database_common.connection_handler
