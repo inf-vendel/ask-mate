@@ -114,22 +114,20 @@ def generate_new_id(post_type):
 
 
 @database_common.connection_handler
-def sort_data(data, header, reversed):
-    dir = True if reversed == "asc" else False
-    sorted_list = sorted(data, key=lambda x: x[header], reverse=dir)
-    return sorted_list
+def sort_data(cursor, header, reversed):
+    query = f"""SELECT * FROM question ORDER BY {header} {reversed};"""
+    data = {'header' : header, 'reversed': reversed}
+    cursor.execute(query)
+    return cursor.fetchall()
 
 
 @database_common.connection_handler
-def edit_question(question_id, new_question_data):
-    question_list = get_question_list()
-    id = int(question_id)
-    question = get_question_by_id(id)
-    question['title'] = new_question_data['title']
-    question['message'] = new_question_data['message']
-    element = get_dict_from_list(question_list, 'id', id)
-    question_list[element] = question
-    connection.write_file('sample_data/question.csv', question_list, header=QUESTION_HEADER)
+def edit_question(cursor, question_id, new_question_data):
+    print(new_question_data)
+    query = f"""UPDATE question SET title = '{new_question_data['title']}',
+    message = '{new_question_data['message']}' WHERE id = {question_id};"""
+    data = {'question_id' : question_id, 'new_question_data': new_question_data}
+    cursor.execute(query, data)
 
 
 @database_common.connection_handler

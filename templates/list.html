@@ -15,11 +15,10 @@
     <tr>
         {% for head in header %}
             <th>
-
                 {{ ' '.join(head.split('_')).title() }}
                 <form action="/list" methods=['GET','POST']></form>
-                <a href="{{ url_for('list_questions', order_by=head, order_direction='asc') }}">▲</a>
-                <a href="{{ url_for('list_questions', order_by=head, order_direction='desc') }}">▼</a>
+                <a href="{{ url_for('list_questions', order_by=head, order_direction='DESC') }}">▲</a>
+                <a href="{{ url_for('list_questions', order_by=head, order_direction='ASC') }}">▼</a>
             </th>
 
         {% endfor %}
