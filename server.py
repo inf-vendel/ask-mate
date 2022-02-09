@@ -30,7 +30,7 @@ def display_question(id):
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
 def delete_question(question_id):
     if request.method == 'GET':
-        data_manager.delete_question(question_id)
+        data_manager.delete_row(question_id, 'question')
         return redirect('/list')
     return render_template('question.html')
 
@@ -38,7 +38,7 @@ def delete_question(question_id):
 @app.route("/<question_id>/answer/<answer_id>/delete", methods=['GET', 'POST'])
 def delete_answer(answer_id, question_id):
     if request.method == 'GET':
-        data_manager.delete_answer(answer_id)
+        data_manager.delete_row(answer_id, 'answer')
         return redirect(f'/question/{question_id}')
     return render_template('question.html', question_id=question_id)
 

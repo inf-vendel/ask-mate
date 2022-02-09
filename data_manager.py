@@ -76,19 +76,10 @@ def get_dict_from_list(cursor, list, head, id):
 
 
 @database_common.connection_handler
-def delete_question(question_id):
-    question_list = get_question_list()
-    id = int(question_id)
-    del question_list[get_dict_from_list(id=id, list=question_list, head="id")]
-    connection.write_file('sample_data/question.csv', question_list, header=QUESTION_HEADER)
-
-
-@database_common.connection_handler
-def delete_answer(id):
-    answers = get_answer_list()
-    id = int(id)
-    del answers[get_dict_from_list(id=id, list=answers, head="id")]
-    connection.write_file('sample_data/answer.csv', answers, header=ANSWER_HEADER)
+def delete_row(cursor, question_id, dataset):
+    query = f"DELETE FROM {dataset} WHERE id = {question_id};"
+    data = {'question_id': question_id, 'dataset': dataset}
+    cursor.execute(query)
 
 
 @database_common.connection_handler
