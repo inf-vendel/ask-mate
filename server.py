@@ -22,7 +22,7 @@ def list_questions(order_by="id", order_direction="desc"):
 def display_question(id):
     question = data_manager.get_question_by_id(id)
     header = ['title', 'message']
-    answer = data_manager.get_answers_by_id(id)
+    answer = data_manager.get_answers_by_id('question_id', id)
     data_manager.count_view(id)
     return render_template('question.html', result=question[0], answer_list=answer, header=header, question_id=id)
 
@@ -116,9 +116,16 @@ def add_comment_to_question(question_id):
 
 
 @app.route("/answer/<int:answer_id>/new-comment", methods=['GET', 'POST'])
-def add_comment_to_answer(answer_id, question_id):
+def add_comment_to_answer(answer_id):
     if request.method == 'POST':
-        return redirect(f'/question/{question_id}')
+        answer = data_manager.get_answers_by_id('id', answer_id)
+        # TODO Lehet, hogy ríldiktrós ez a szar is.
+        q_i = answer['question_id']
+        # return redirect(f'/question/{question_id}')
+        result = request.form.to_dict()
+        data_manager.post_comment(result['message'], id=answer_id, dataset='answer_id')
+        return redirect(f"/question/{answer['q_i']}")
+    return render_template('comment_answer.html', answer_id=answer_id)
 
 
 # @app.route('/search?q=<str:search phrase>')

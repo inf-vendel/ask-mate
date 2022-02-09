@@ -23,6 +23,13 @@
                 {% endfor %}
                 </tr>
             </tbody>
+        <tbody>
+                <tr>
+                {% for comment in comments %}
+                    <td class="comment">{{ comment[message] }}</td>
+                {% endfor %}
+                </tr>
+        </tbody>
     </thead>
 </table>
 <table>

@@ -51,10 +51,10 @@ def realdict_to_dict(d):
 
 
 @database_common.connection_handler
-def get_answers_by_id(cursor, id):
+def get_answers_by_id(cursor, idtype, id):
     query = f"""SELECT * FROM answer 
-                    WHERE question_id='{id}'"""
-    data = {'id': id}
+                    WHERE {idtype} = {id}"""
+    data = {'id': id, 'idtype' : idtype}
     cursor.execute(query, data)
     return cursor.fetchall()
 
@@ -144,3 +144,8 @@ def checkinput(text):
     #TODO add a single quote to every single quote that is on its own.
     return text
 
+
+@database_common.connection_handler
+def search(text):
+    query = f"""SELECT * FROM question WHERE LIKE'%'{text};"""
+    pass
