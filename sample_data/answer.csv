@@ -1,26 +1,26 @@
 id,submission_time,vote_number,question_id,message,image
-2,1234,0,7,Az isten basszon meg!,
-3,1234,-9,10,rthjkl,
-4,1234,-8,11,nem.,
-5,1234,-1,11,yes,
-6,1234,9,14,"FastFoxes, obviously...",
-7,1234,46,14,"When FastFoxes first started working, I didn't believe it would work. Now I use it 7/24.",
-8,1234,-6,14,"Stackoverflow for me, at least this website can bear with UTF-8",
-9,1234,4,1,"
+1,'2022-10-21 10:30',0,7,'Az isten basszon meg!',
+3,'2022-10-21 10:30',-9,10,'rthjkl',
+4,'2022-10-21 10:30',-8,11,'nem',
+5,'2022-10-21 10:30',-1,11,'yes',
+6,'2022-10-21 10:30',9,14,"FastFoxes, obviously...",
+7,'2022-10-21 10:30',46,14,"When FastFoxes first started working, I didn't believe it would work. Now I use it 7/24.",
+8,'2022-10-21 10:30',-6,14,"Stackoverflow for me, at least this website can bear with UTF-8",
+9,'2022-10-21 10:30',4,1,"
 Creating a List. Lists in Python can be created by just placing the sequence inside the square brackets[]. Unlike Sets, a list doesn't need a built-in function for the creation of a list. Note – Unlike Sets, the list may contain mutable elements.
 ",
-10,1234,-4,1,"For eg, to add an element ""python"" at the end of the list: a. append(""python"") Now, a=[1,20,'abc',3.26,'d','python'] c)extend(object/s) This is used to add the object or objects to the end of the list. For eg, to add a tuple of elements to the end of the list: b=(1.2, 3.4, 4.5)
+10,'2022-10-21 10:30',-4,1,"For eg, to add an element ""python"" at the end of the list: a. append(""python"") Now, a=[1,20,'abc',3.26,'d','python'] c)extend(object/s) This is used to add the object or objects to the end of the list. For eg, to add a tuple of elements to the end of the list: b=(1.2, 3.4, 4.5)
 ",
-11,1234,4,2,"
+11,'2022-10-21 10:30',4,2,"
 CSS can be added to HTML documents in 3 ways:
 Inline - by using the style attribute inside HTML elements.
 Internal - by using a <style> element in the <head> section.
 External - by using a <link> element to link to an external CSS file.",
-12,1234,1,2,"
+12,'2022-10-21 10:30',1,2,"
 What is CSS? CSS is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows one to adapt the presentation to different types of devices, such as large screens, small screens, or printers. CSS is independent of HTML and can be used with any XML-based markup language.",
-13,1234,0,3,"This may help you, more documentation here:https://www.python.org/dev/peps/pep-0263/",
-14,1234,-2,14,"document.getElementById(""mytext"").value = ""My value"";",
-16,1234,5,4,"The correct answer to resolve this issue was found at the link below: https://githubmemory.com/repo/microsoft/pylance-release/issues/1656 via a comment by jakebailey. He says, ""Did you install matplotlib into the environment while VS Code was running? If you reload, does this message go away?""
+13,'2022-10-21 10:30',0,3,"This may help you, more documentation here:https://www.python.org/dev/peps/pep-0263/",
+14,'2022-10-21 10:30',-2,14,"document.getElementById(""mytext"").value = ""My value"";",
+16,'2022-10-21 10:30',5,4,"The correct answer to resolve this issue was found at the link below: https://githubmemory.com/repo/microsoft/pylance-release/issues/1656 via a comment by jakebailey. He says, ""Did you install matplotlib into the environment while VS Code was running? If you reload, does this message go away?""
 
 VSCode doesn't refresh anything. So, after you install anything via pip or pip3, it is a good idea to:
 
@@ -28,8 +28,8 @@ Save your work.
 Close VScode.
 Restart VScode.
 This fixed it for me.",
-17,1234,2,4,"I have this problem before. What the conditions of mine is that I have install multiply versions of python and numpy in my OS. That's why the python can't find the right numpy to support the matplotlib. The method I choose to solved this problem is the modify the SPYTHONPATH by editing the file .bashrc in my home path. Change the order of the python install path shown, like putting the path ""/usr/lib/python2.7/dist-packages"" in the front of the SPYTHONPATH. Maybe you can find something amazing. Good luck for you!!",
-18,1234,0,5,"If you check the unicode standard for the characters you're referring to: http://www.unicode.org/charts/PDF/U0080.pdf
+17,'2022-10-21 10:30',2,4,"I have this problem before. What the conditions of mine is that I have install multiply versions of python and numpy in my OS. That's why the python can't find the right numpy to support the matplotlib. The method I choose to solved this problem is the modify the SPYTHONPATH by editing the file .bashrc in my home path. Change the order of the python install path shown, like putting the path ""/usr/lib/python2.7/dist-packages"" in the front of the SPYTHONPATH. Maybe you can find something amazing. Good luck for you!!",
+18,'2022-10-21 10:30',0,5,"If you check the unicode standard for the characters you're referring to: http://www.unicode.org/charts/PDF/U0080.pdf
 
 You would see that all the codepoints you have in your string do not have representable glyphs and are control characters.
 
@@ -38,26 +38,26 @@ Which means that it is expected that they are rendered as empty squares (or dots
 If it works for someone somewhere - it's a non-standard behaviour, which one must not rely on, since it is, well, non-standard.
 
 Apparently the text you have has the initial encoding of cp1250, so you either should treat it accordingly, or re-encode entities manually:",
-19,1234,0,5,no!,
-20,1234,0,8,"special zippers - you'll see zippers in dry bags, coolers, and, most importantly, dry suits. This is the most expensive but most waterproof connection type. I use this type for my drysuit and my small drybag that holds sensitive items.
+19,'2022-10-21 10:30',0,5,no!,
+20,'2022-10-21 10:30',0,8,"special zippers - you'll see zippers in dry bags, coolers, and, most importantly, dry suits. This is the most expensive but most waterproof connection type. I use this type for my drysuit and my small drybag that holds sensitive items.
 rolled connections - you see examples of rolled connections in drybags all the time, but also in mating together some articles of waterproof clothing (such as with bibs). It is cheaper than zippers and fairly waterproof if rolled correctly. I use this for all my other drybags.
 surface connections - you'll see pants and tops that are designed to overlap with neoprene waist bands and ""double tunnels"". This creates a lock and key type connection between the two materials. It relies on the friction of the two waist band materials to be waterproof. In my experience it is splash proof but not submersion proof. I sold my pants that used this type of connection because I deemed them unsafe for my whitewater use cases and bought a zipper based drysuit.
 Unless you have an actual connection between your articles you will get wet at the connections between your layers. What will happen is your boots and pants will slowly fill with water until you are submerged to water level. How quickly this will happen will depend on how tight the gaiters are, but I imagine it will be on the order of a few minutes at best.
 
 If you need to stand in water up to your waist look into waders (often sold for fishing) or a drysuit (often sold for more ""active"" sports such as whitewater and diving) with integrated feet.",
-21,1234,0,8,"No. Classically, there are two ways to clothe yourself for partially submersed activities in water: wetsuits or drysuits.
+21,'2022-10-21 10:30',0,8,"No. Classically, there are two ways to clothe yourself for partially submersed activities in water: wetsuits or drysuits.
 
 A wetsuit is a tight neoprene layer, usually full-body, used by divers, kayakers, surfers and such, which is designed to be worn right on your skin. It allows water in, but does not allow much circulation of water. That means, once it is wet, the water that is in close contact with your skin stays there. Your body heats the water up, you end up with an equilibrium, and from that time onward it just does not matter whether you're wet or not.
 
 A drysuit is something intended to keep the inside dry. It can be breathable or not depending on usage - for example, a one-piece drysuit used by fishermen is probably not breathable in the pants area since that would just make no sense as long as it's submersed.",
-22,1234,0,6,"Fetch all remote branches. git fetch origin. ...
+22,'2022-10-21 10:30',0,6,"Fetch all remote branches. git fetch origin. ...
 List the branches available for checkout. To see the branches available for checkout, run the following: git branch -a. ...
 Pull changes from a remote branch. Note that you cannot make changes directly on a remote branch.
 ",
-23,1234,0,6,Git checkout remote branch is a way for a programmer to access the work of a colleague or collaborator for the purpose of review and collaboration. There is no actual command called “git checkout remote branch.” It's just a way of referring to the action of checking out a remote branch.,
-24,1234,5,9,Remove this question pls ASAP,
-25,1234,0,10,no i don't,
-26,1234,0,13,"Almost positive I answered something like this a long while ago - need to find it. But in summary, it is just how the dialogs are set up. Duplicates get special attention in the Flag dialog so they get listed separately. But when you click on ""Needs Improvement"", the dialog you see is actually the close dialog (same thing that 3K users see when they click the ""Close"" button. SO obviously didn't feel it was necessary to design a special close flag dialog that removes the duplicated ""duplicate"" flag ",
-27,1234,0,13,cwcqdqddnlkcjnskmc,
-28,1234,0,12,yeah ofc dwldwl wl wl  c msez<h asmc dvlrő,
-29,1234,0,12,lknlnáéá hj hgv,
+23,'2022-10-21 10:30',0,6,Git checkout remote branch is a way for a programmer to access the work of a colleague or collaborator for the purpose of review and collaboration. There is no actual command called “git checkout remote branch.” It's just a way of referring to the action of checking out a remote branch.,
+24,'2022-10-21 10:30',5,9,Remove this question pls ASAP,
+25,'2022-10-21 10:30',0,10,no i don't,
+26,'2022-10-21 10:30',0,13,"Almost positive I answered something like this a long while ago - need to find it. But in summary, it is just how the dialogs are set up. Duplicates get special attention in the Flag dialog so they get listed separately. But when you click on ""Needs Improvement"", the dialog you see is actually the close dialog (same thing that 3K users see when they click the ""Close"" button. SO obviously didn't feel it was necessary to design a special close flag dialog that removes the duplicated ""duplicate"" flag ",
+27,'2022-10-21 10:30',0,13,cwcqdqddnlkcjnskmc,
+28,'2022-10-21 10:30',0,12,yeah ofc dwldwl wl wl  c msez<h asmc dvlrő,
+29,'2022-10-21 10:30',0,12,lknlnáéá hj hgv,

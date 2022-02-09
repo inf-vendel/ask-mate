@@ -44,7 +44,7 @@ def filter_question(cursor, question, headers=[]):
 
 @database_common.connection_handler
 def get_answers_by_id(cursor, id):
-    query = """SELECT * FROM answers 
+    query = """SELECT * FROM answer 
                     WHERE id=%(id)s"""
     data = {'id': id}
     cursor.execute(query, data)
@@ -53,12 +53,11 @@ def get_answers_by_id(cursor, id):
 
 @database_common.connection_handler
 def add_question(cursor, question):
-    data = get_question_list()
-    for header in QUESTION_HEADER:
-        if header not in list(question.keys()):
-            question[header] = fill_post(post_type='question', header=header)
-    data.append(question)
-    connection.write_file('sample_data/question.csv', data, header=QUESTION_HEADER)
+    query = f"""INSERT INTO question (submission_time,view_number,vote_number,title,message,image) 
+    VALUES (CURRENT_TIMESTAMP, 0, 0, {question['title']}, {question['message']}, {question['image']})"""
+    data = {'question': question['title']}
+    cursor.execute(query, data)
+
 
 
 @database_common.connection_handler

@@ -52,7 +52,10 @@ def ask_question():
             filename = secure_filename(file.filename)
             file.save(os.path.join('static', filename))
             result['image'] = filename
+        else:
+            result['image'] = "kola"
         data_manager.add_question(result)
+
         return redirect('/list')
     return render_template('ask.html')
 

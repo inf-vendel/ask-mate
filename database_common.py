@@ -5,6 +5,7 @@ import os
 import psycopg2
 import psycopg2.extras
 
+
 os.environ['PSQL_USER_NAME'] = "adam"
 os.environ['PSQL_PASSWORD'] = "codecool"
 os.environ['PSQL_HOST'] = "localhost"
