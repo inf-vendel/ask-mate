@@ -13,14 +13,14 @@ DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
 
 @database_common.connection_handler
 def get_question_list(cursor):
-    query = """SELECT * FROM question;"""
+    query = """SELECT * FROM question ORDER BY id ASC;"""
     cursor.execute(query)
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_answer_list(cursor):
-    query = """SELECT * FROM answer"""
+    query = """SELECT * FROM answer ORDER BY id ASC;"""
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -148,21 +148,15 @@ def get_answer_by_id(id):
 
 
 @database_common.connection_handler
-def vote_message(id, dataset, vote):
+def vote_message(cursor, id, dataset, vote):
     id = int(id)
-    if dataset == 'question':
-        data = get_question_list()
-        message = get_question_by_id(id)
-        message['vote_number'] = int(message['vote_number']) + vote
-        element = get_dict_from_list(data, 'id', id)
-        data[element] = message
-        connection.write_file('sample_data/question.csv', data, header=QUESTION_HEADER)
-    elif dataset == 'answer':
-        data = get_answer_list()
-        message = get_answer_by_id(id)
-        message['vote_number'] = int(message['vote_number']) + vote
-        element = get_dict_from_list(data, 'id', id)
-        data[element] = message
-        connection.write_file('sample_data/answer.csv', data, header=ANSWER_HEADER)
+    query = f"SELECT vote_number FROM {dataset} WHERE id = {id}"
+    cursor.execute(query)
+    vote_number = (realdict_to_dict(cursor.fetchall()))[0]['vote_number'] + vote
+    print(f'----!!  {type(vote_number)}  !!-----')
+    query = f"""UPDATE {dataset} SET vote_number = {vote_number} WHERE id = {id};"""
+    print('__________________________',query)
+    cursor.execute(query)
+
 
 
