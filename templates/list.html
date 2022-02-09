@@ -40,14 +40,6 @@
             <td>
                 <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}">👍</a>
                 <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}">👎</a>
-                <form action="/question/{{ question_id }}/new-comment" method="POST">
-                    <p>
-                        <textarea name="search" type="text" required></textarea>
-                    </p>
-                    <p>
-                        <button type="submit">Add comment</button>
-                    </p>
-                </form>
             </td>
         </tr>
     {% endfor %}

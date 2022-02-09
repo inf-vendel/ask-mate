@@ -87,18 +87,6 @@ def edit_question(question_id):
     return render_template('edit_question.html', question_id=question_id, question=question[0])
 
 
-# @app.route("/question/<question_id>/vote_up", methods=['GET', 'POST'])
-# def vote_up_question(question_id):
-#     data_manager.vote_message(question_id, 'question', vote = 1)
-#     return redirect('/list')
-#
-#
-# @app.route("/question/<question_id>/vote_down", methods=['GET', 'POST'])
-# def vote_down_question(question_id):
-#     data_manager.vote_message(question_id, 'question', vote = -1)
-#     return redirect('/list')
-#
-
 @app.route('/question/<question_id>/<vote_type>')
 def vote_question(question_id, vote_type):
     data_manager.vote_message(question_id, 'question', vote=int(vote_type))
@@ -120,7 +108,11 @@ def vote_down_answer(answer_id, question_id):
 @app.route("/question/<int:question_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_question(question_id):
     if request.method == 'POST':
+        # return redirect(f'/question/{question_id}')
+        result = request.form.to_dict()
+        data_manager.post_comment(result['message'], id=question_id, dataset='question_id')
         return redirect(f'/question/{question_id}')
+    return render_template('comment_question.html', question_id=question_id)
 
 
 @app.route("/answer/<int:answer_id>/new-comment", methods=['GET', 'POST'])

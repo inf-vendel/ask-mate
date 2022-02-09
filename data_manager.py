@@ -89,29 +89,12 @@ def post_answer(cursor, answer, question_id):
     data = {'question_id': question_id, 'answer': answer}
     cursor.execute(query, data)
 
-
 @database_common.connection_handler
-def fill_post(post_type, header):
-    if header == 'id':
-        return generate_new_id(post_type)
-    elif header == 'submission_time':
-        return 1234
-    elif header == 'view_number':
-        return 0
-    elif header == 'vote_number':
-        return 0
-
-
-@database_common.connection_handler
-def generate_new_id(post_type):
-    arr = get_question_list() if post_type == 'question' else get_answer_list()
-    ids = [int(q['id']) for q in arr]
-    new_id = max(ids) + 1
-    if post_type == 'question':
-        return new_id
-    if post_type == 'answer':
-        return new_id
-
+def post_comment(cursor, comment, id, dataset):
+    query = f"""INSERT INTO comment ({dataset},message,submission_time,edited_count) 
+        VALUES ({id}, '{comment}', CURRENT_TIMESTAMP, 0)"""
+    data = {'id': id, 'dataset': dataset, 'comment' : comment}
+    cursor.execute(query, data)
 
 @database_common.connection_handler
 def sort_data(cursor, header, reversed):
@@ -123,7 +106,6 @@ def sort_data(cursor, header, reversed):
 
 @database_common.connection_handler
 def edit_question(cursor, question_id, new_question_data):
-    print(new_question_data)
     query = f"""UPDATE question SET title = '{new_question_data['title']}',
     message = '{new_question_data['message']}' WHERE id = {question_id};"""
     data = {'question_id' : question_id, 'new_question_data': new_question_data}
@@ -131,10 +113,13 @@ def edit_question(cursor, question_id, new_question_data):
 
 
 @database_common.connection_handler
-def get_answer_by_id(id):
-    answers = get_answer_list()
-    i = get_dict_from_list(answers, "id", id)
-    return answers[i]
+def get_answer_by_id(cursor, id):
+    query = f"""SELECT title, message FROM answer
+                WHERE id={id}"""
+    data = {'id': id}
+    cursor.execute(query, data)
+    cur = cursor.fetchall()
+    return realdict_to_dict(cur)
 
 
 @database_common.connection_handler
@@ -155,5 +140,7 @@ def vote_message(cursor, id, dataset, vote):
     query = f"""UPDATE {dataset} SET vote_number = {vote_number} WHERE id = {id};"""
     cursor.execute(query)
 
-
+def checkinput(text):
+    #TODO add a single quote to every single quote that is on its own.
+    return text
 
