@@ -1,3 +1,5 @@
+import psycopg2
+
 import connection
 from typing import List, Dict
 from psycopg2 import sql
@@ -54,7 +56,7 @@ def realdict_to_dict(d):
 def get_answers_by_id(cursor, idtype, id):
     query = f"""SELECT * FROM answer 
                     WHERE {idtype} = {id}"""
-    data = {'id': id, 'idtype' : idtype}
+    data = {'id': id, 'idtype': idtype}
     cursor.execute(query, data)
     return cursor.fetchall()
 
@@ -80,26 +82,33 @@ def delete_row(cursor, question_id, dataset):
     query = f"DELETE FROM {dataset} WHERE id = {question_id};"
     data = {'question_id': question_id, 'dataset': dataset}
     cursor.execute(query)
+    cursor.fetchone()
 
 
 @database_common.connection_handler
 def post_answer(cursor, answer, question_id):
     query = f"""INSERT INTO answer (submission_time,vote_number,question_id,message,image) 
-        VALUES (CURRENT_TIMESTAMP, 0, '{question_id}', '{answer['message']}', '{answer['image']}')"""
-    data = {'question_id': question_id, 'answer': answer}
+        VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(answer_message)s, %(answer_image)s)"""
+    data = {'question_id': question_id, 'answer_message': answer['message'], 'answer_image': answer['image']}
     cursor.execute(query, data)
+    try:
+        cursor.fetchone()
+    except psycopg2.ProgrammingError:
+        pass
+
 
 @database_common.connection_handler
 def post_comment(cursor, comment, id, dataset):
     query = f"""INSERT INTO comment ({dataset},message,submission_time,edited_count) 
         VALUES ({id}, '{comment}', CURRENT_TIMESTAMP, 0)"""
-    data = {'id': id, 'dataset': dataset, 'comment' : comment}
+    data = {'id': id, 'dataset': dataset, 'comment': comment}
     cursor.execute(query, data)
+    # (result['message'], id=question_id, dataset='question_id')
 
 @database_common.connection_handler
 def sort_data(cursor, header, reversed):
     query = f"""SELECT * FROM question ORDER BY {header} {reversed};"""
-    data = {'header' : header, 'reversed': reversed}
+    data = {'header': header, 'reversed': reversed}
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -108,14 +117,13 @@ def sort_data(cursor, header, reversed):
 def edit_question(cursor, question_id, new_question_data):
     query = f"""UPDATE question SET title = '{new_question_data['title']}',
     message = '{new_question_data['message']}' WHERE id = {question_id};"""
-    data = {'question_id' : question_id, 'new_question_data': new_question_data}
+    data = {'question_id': question_id, 'new_question_data': new_question_data}
     cursor.execute(query, data)
 
 
 @database_common.connection_handler
 def get_answer_by_id(cursor, id):
-    query = f"""SELECT title, message FROM answer
-                WHERE id={id}"""
+    query = f"""SELECT title, message FROM answer WHERE id={id}"""
     data = {'id': id}
     cursor.execute(query, data)
     cur = cursor.fetchall()
@@ -140,8 +148,17 @@ def vote_message(cursor, id, dataset, vote):
     query = f"""UPDATE {dataset} SET vote_number = {vote_number} WHERE id = {id};"""
     cursor.execute(query)
 
+#
+# def get_comments_by_id(cursor, id, dataset):
+#     query = """SELECT message, submission_time FROM comment WHERE %(dataset)s = %(id)s"""
+#     data = {'id': id, 'dataset': dataset}
+#     cursor.execute(query, data)
+#     cur = cursor.fetchall()
+#     return realdict_to_dict(cur)
+
+
 def checkinput(text):
-    #TODO add a single quote to every single quote that is on its own.
+    # TODO add a single quote to every single quote that is on its own.
     return text
 
 

@@ -24,7 +24,9 @@ def display_question(id):
     header = ['title', 'message']
     answer = data_manager.get_answers_by_id('question_id', id)
     data_manager.count_view(id)
-    return render_template('question.html', result=question[0], answer_list=answer, header=header, question_id=id)
+    # comments = data_manager.get_comments_by_id('question_id', id, 'question_id')
+    return render_template('question.html', result=question[0],
+                           answer_list=answer, header=header, question_id=id)
 
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
