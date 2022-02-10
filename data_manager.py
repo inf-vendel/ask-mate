@@ -13,36 +13,32 @@ DATA_FIELD_PATH_1 = 'sample_data/question.csv'
 DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
 
 
+
 @database_common.connection_handler
 def get_question_list(cursor):
-    query = """SELECT * FROM question ORDER BY id ASC;"""
-    cursor.execute(query)
+    cursor.execute(sql.SQL("SELECT * FROM question ORDER BY id ASC"))
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_answer_list(cursor):
-    query = """SELECT * FROM answer ORDER BY id ASC;"""
-    cursor.execute(query)
+    cursor.execute(sql.SQL("SELECT * FROM answer ORDER BY id ASC"))
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def get_question_by_id(cursor, id):
-    query = f"""SELECT title, message FROM question 
-                WHERE id={id}"""
-    data = {'id': id}
-    cursor.execute(query, data)
-    cur = cursor.fetchall()
-    return realdict_to_dict(cur)
+    cursor.execute(sql.SQL("SELECT title, message FROM question WHERE id={id}").format
+                   (id=sql.Identifier("id")))
+    return cursor.fetchall()
 
 
-def filter_question(question, headers=[]):
-    data = []
-
-    for item in headers:
-        data.append(question[item])
-    return data
+# def filter_question(question, headers=[]):
+#     data = []
+#
+#     for item in headers:
+#         data.append(question[item])
+#     return data
 
 
 def realdict_to_dict(d):
@@ -54,19 +50,19 @@ def realdict_to_dict(d):
 
 @database_common.connection_handler
 def get_answers_by_id(cursor, idtype, id):
-    query = f"""SELECT * FROM answer 
-                    WHERE {idtype} = {id}"""
-    data = {'id': id, 'idtype': idtype}
-    cursor.execute(query, data)
+    cursor.execute(sql.SQL("SELECT * FROM answer WHERE {idtype} = {id}").format
+                   (idtype=sql.Identifier(idtype),
+                    id=sql.Identifier("id")))
     return cursor.fetchall()
 
 
 @database_common.connection_handler
 def add_question(cursor, question):
-    query = f"""INSERT INTO question (submission_time,view_number,vote_number,title,message,image) 
-    VALUES (CURRENT_TIMESTAMP, 0, 0, '{question['title']}', '{question['message']}', '{question['image']}')"""
-    data = {'question': question['title']}
-    cursor.execute(query, data)
+    cursor.execute(sql.SQL("""INSERT INTO question (submission_time,view_number,vote_number,title,message,image)
+    VALUES (CURRENT_TIMESTAMP, 0, 0, {title}, {message}, {image})""").format
+                   (message=sql.Literal(question['message']),
+                    title=sql.Literal(question['title']),
+                    image=sql.Literal(question['image'])))
 
 
 @database_common.connection_handler
@@ -79,10 +75,9 @@ def get_dict_from_list(cursor, list, head, id):
 
 @database_common.connection_handler
 def delete_row(cursor, question_id, dataset):
-    query = f"DELETE FROM {dataset} WHERE id = {question_id};"
-    data = {'question_id': question_id, 'dataset': dataset}
-    cursor.execute(query)
-    cursor.fetchone()
+    cursor.execute(sql.SQL("DELETE FROM {dataset} WHERE id = {question_id}").format
+                   (dataset=sql.SQL(dataset),  # sql table name
+                    question_id=sql.Literal(question_id)))
 
 
 @database_common.connection_handler
