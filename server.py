@@ -21,11 +21,11 @@ def list_questions(order_by="id", order_direction="desc"):
 @app.route("/question/<int:id>", methods=['GET', 'POST'])
 def display_question(id):
     question = data_manager.get_question_by_id(id)
+    comments = data_manager.get_comments_by_id('question_id', id)
     header = ['title', 'message']
     answer = data_manager.get_answers_by_id('question_id', id)
     data_manager.count_view(id)
-    # comments = data_manager.get_comments_by_id('question_id', id, 'question_id')
-    return render_template('question.html', result=question[0],
+    return render_template('question.html', comments = comments, result=question,
                            answer_list=answer, header=header, question_id=id)
 
 
@@ -86,7 +86,7 @@ def edit_question(question_id):
         result = request.form.to_dict()
         data_manager.edit_question(question_id, result)
         return redirect(f'/question/{question_id}')
-    return render_template('edit_question.html', question_id=question_id, question=question[0])
+    return render_template('edit_question.html', question_id=question_id, question=question)
 
 
 @app.route('/question/<question_id>/<vote_type>')
@@ -110,9 +110,8 @@ def vote_down_answer(answer_id, question_id):
 @app.route("/question/<int:question_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_question(question_id):
     if request.method == 'POST':
-        # return redirect(f'/question/{question_id}')
         result = request.form.to_dict()
-        data_manager.post_comment(result['message'], id=question_id, dataset='question_id')
+        data_manager.post_comment(comment = result['message'], id=question_id, idtype='question_id')
         return redirect(f'/question/{question_id}')
     return render_template('comment_question.html', question_id=question_id)
 
@@ -120,13 +119,12 @@ def add_comment_to_question(question_id):
 @app.route("/answer/<int:answer_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_answer(answer_id):
     if request.method == 'POST':
-        answer = data_manager.get_answers_by_id('id', answer_id)
-        # TODO Lehet, hogy ríldiktrós ez a szar is.
-        q_i = answer['question_id']
+        answer = data_manager.realdict_to_dict(data_manager.get_answers_by_id('id', answer_id))
+        print('------',answer)
         # return redirect(f'/question/{question_id}')
         result = request.form.to_dict()
-        data_manager.post_comment(result['message'], id=answer_id, dataset='answer_id')
-        return redirect(f"/question/{answer['q_i']}")
+        data_manager.post_comment(comment = result['message'], id=answer_id, idtype='answer_id')
+        return redirect(f"/question/{answer['question_id']}")
     return render_template('comment_answer.html', answer_id=answer_id)
 
 

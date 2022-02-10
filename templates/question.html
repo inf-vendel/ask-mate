@@ -29,7 +29,7 @@
     <tbody>
     <tr>
         {% for comment in comments %}
-            <td class="comment">{{ comment[message] }}</td>
+            <li class="comment">{{ comment["message"] }} <i>({{ comment["submission_time"] }})</i></li>
         {% endfor %}
     </tr>
     </tbody>
