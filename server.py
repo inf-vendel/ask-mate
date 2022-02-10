@@ -24,6 +24,8 @@ def display_question(id):
     comments = data_manager.get_comments_by_id('question_id', id)
     header = ['title', 'message']
     answer = data_manager.get_answers_by_id('question_id', id)
+    for reply in answer:
+        reply["comments"] = (data_manager.get_comments_by_id('answer_id', reply['id']))
     data_manager.count_view(id)
     return render_template('question.html', comments = comments, result=question,
                            answer_list=answer, header=header, question_id=id)
@@ -120,19 +122,29 @@ def add_comment_to_question(question_id):
 def add_comment_to_answer(answer_id):
     if request.method == 'POST':
         answer = data_manager.realdict_to_dict(data_manager.get_answers_by_id('id', answer_id))
-        print('------',answer)
-        # return redirect(f'/question/{question_id}')
         result = request.form.to_dict()
-        data_manager.post_comment(comment = result['message'], id=answer_id, idtype='answer_id')
+        data_manager.post_comment(comment=result['message'], id=answer_id, idtype='answer_id')
         return redirect(f"/question/{answer['question_id']}")
     return render_template('comment_answer.html', answer_id=answer_id)
 
 
-# @app.route('/search?q=<str:search phrase>')
-# def search():
-#     return render_template('question.html')
+@app.route("/question/<question_id>/comment/<comment_id>/edit", methods=['GET', 'POST'])
+def delete_question_comment(question_id, comment_id):
+    if request.method == 'GET':
+        data_manager.delete_row(comment_id, 'comment')
+        return redirect(f'/question/{question_id}')
+    return render_template('question.html')
 
 
+@app.route("/search", methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        print('lol')
+        arg = request.form.to_dict()
+        search_phrase = arg['search']
+        q,a = data_manager.search(search_phrase)
+        return render_template('list.html',
+                               question_list=q, answer_list=a, header=connection.QUESTION_HEADER)
 
 
 if __name__ == "__main__":

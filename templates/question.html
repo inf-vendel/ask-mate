@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <title>FastFox</title>
 </head>
 <body>
@@ -29,7 +30,11 @@
     <tbody>
     <tr>
         {% for comment in comments %}
-            <li class="comment">{{ comment["message"] }} <i>({{ comment["submission_time"] }})</i></li>
+            <li class="comment">{{ comment["message"] }}
+                <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"] }}</time>
+                <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}">
+                    Delete comment
+                </a></li>
         {% endfor %}
     </tr>
     </tbody>
@@ -44,6 +49,13 @@
                 <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id']) }}">👍</a>
                 <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id']) }}">👎</a>
                 ({{ answer["vote_number"] }})
+                {% for comment in answer['comments'] %}
+                    <ul>{{ comment['message'] }} <time class="datetime">({{ comment['submission_time'] }})</time>
+                    <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}">
+                        Delete comment
+                    </a>
+                    </ul>
+                {% endfor %}
                 <a href="{{ url_for('add_comment_to_answer', question_id=question_id, answer_id=answer['id']) }}">Comment</a>
             </li>
         {% endfor %}

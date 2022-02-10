@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>Fast Foxes</h1>
-<a href="{{ url_for('ask_question') }}">Ask a Question</a>
+<a href="{{ url_for('ask_question') }}" title="Don't panic! We are supportive and fast like a fox!">Ask a Question</a>
 
 <table>
     <thead>
@@ -28,7 +28,7 @@
         <tr>
             {% for key,value in question.items() %}
                 {% if key == 'id' %}
-                    <td><a href="{{ url_for('display_question', id=question['id']) }}">{{ value }}</a></td>
+                    <td><a href="{{ url_for('display_question', id=question['id']) }}" title="Open this question">{{ value }}</a></td>
                 {% elif key == 'image' %}
                     <td>
                         <img src="{{ url_for('static', filename='no-image-icon-0.jpg') }}" alt="uwu" height="100">
@@ -38,19 +38,38 @@
                 {% endif %}
             {% endfor %}
             <td>
-                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}">👍</a>
-                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}">👎</a>
+                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}" title="Vote this question up!">👍</a>
+                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}"title="Vote this question down!">👎</a>
             </td>
         </tr>
     {% endfor %}
+
+    {% for question in answer_list %}
+    <tr class="secondary">
+        {% for key,value in question.items() %}
+            {% if key == 'id' %}
+                <td><a href="{{ url_for('display_question', id=question['id']) }}">{{ value }}</a></td>
+            {% elif key == 'image' %}
+                <td>
+                    <img src="{{ url_for('static', filename='no-image-icon-0.jpg') }}" alt="uwu" height="100">
+                </td>
+            {% else %}
+                <td>{{ value }}</td>
+            {% endif %}
+        {% endfor %}
+        <td>
+            <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}" title="Vote this question up!">👍</a>
+            <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}"title="Vote this question down!">👎</a>
+        </td>
+        </tr>
+    {% endfor %}
     <h2>Search something</h2>
-    <form action="/search?q=<str:search phrase>" method="POST">
+    <form action="/search" method="POST">
         <p>
-            <textarea name="search" type="text" required></textarea>
+            <textarea name="search" type="text" required title="Search for something!"></textarea>
         </p>
         <p>
             <button type="submit">Search</button>
-        </p>
     </form>
     </tbody>
     </thead>

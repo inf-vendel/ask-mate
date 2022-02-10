@@ -6,11 +6,11 @@ from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 import database_common
 
-
-QUESTION_HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
-ANSWER_HEADER = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
-DATA_FIELD_PATH_1 = 'sample_data/question.csv'
-DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
+#
+# QUESTION_HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
+# ANSWER_HEADER = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
+# DATA_FIELD_PATH_1 = 'sample_data/question.csv'
+# DATA_FIELD_PATH_2 = 'sample_data/answer.csv'
 
 
 
@@ -22,27 +22,30 @@ def get_question_list(cursor):
 
 @database_common.connection_handler
 def get_question_by_id(cursor, id):
-    cursor.execute(sql.SQL("SELECT title, message FROM question WHERE {col}={id}").format
-                   (col=sql.Literal(id),
-                    id=sql.Identifier('id')))
+    cursor.execute(sql.SQL("SELECT title, message FROM question WHERE {col}={id}").format(
+        col=sql.Literal(id),
+        id=sql.Identifier('id'))
+    )
     content = realdict_to_dict(cursor.fetchall())
     return content
 
 
 @database_common.connection_handler
 def get_answers_by_id(cursor, idtype, id):
-    cursor.execute(sql.SQL("SELECT * FROM answer WHERE {col}={id}").format
-                   (col=sql.SQL(idtype),
-                    id=sql.Literal(id)))
+    cursor.execute(sql.SQL("SELECT * FROM answer WHERE {col}={id}").format(
+        col=sql.SQL(idtype),
+        id=sql.Literal(id))
+    )
     content = cursor.fetchall()
     return content
 
 
 @database_common.connection_handler
 def get_comments_by_id(cursor, idtype, id):
-    cursor.execute(sql.SQL("SELECT * FROM comment WHERE {col}={id}").format
-                   (col=sql.SQL(idtype),
-                    id=sql.Literal(id)))
+    cursor.execute(sql.SQL("SELECT * FROM comment WHERE {col}={id}").format(
+        col=sql.SQL(idtype),
+        id=sql.Literal(id))
+    )
     content = cursor.fetchall()
     return content
 
@@ -60,17 +63,19 @@ def realdict_to_dict(d):
 @database_common.connection_handler
 def add_question(cursor, question):
     cursor.execute(sql.SQL("""INSERT INTO question (submission_time,view_number,vote_number,title,message,image)
-    VALUES (CURRENT_TIMESTAMP, 0, 0, {title}, {message}, {image})""").format
-                   (message=sql.Literal(question['message']),
-                    title=sql.Literal(question['title']),
-                    image=sql.Literal(question['image'])))
+    VALUES (CURRENT_TIMESTAMP, 0, 0, {title}, {message}, {image})""").format(
+        message=sql.Literal(question['message']),
+        title=sql.Literal(question['title']),
+        image=sql.Literal(question['image']))
+    )
 
 
 @database_common.connection_handler
 def delete_row(cursor, question_id, dataset):
-    cursor.execute(sql.SQL("DELETE FROM {dataset} WHERE id = {question_id}").format
-                   (dataset=sql.SQL(dataset),  # sql table name
-                    question_id=sql.Literal(question_id)))
+    cursor.execute(sql.SQL("DELETE FROM {dataset} WHERE id = {question_id}").format(
+        dataset=sql.SQL(dataset),
+        question_id=sql.Literal(question_id))
+    )
 
 
 @database_common.connection_handler
@@ -79,25 +84,26 @@ def post_answer(cursor, answer, question_id):
         VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(answer_message)s, %(answer_image)s)"""
     data = {'question_id': question_id, 'answer_message': answer['message'], 'answer_image': answer['image']}
     cursor.execute(query, data)
-# do_this(action = 'delete', table = 'question', 'id', '5')
+
 
 @database_common.connection_handler
 def post_answer(cursor, answer, question_id):
     cursor.execute(sql.SQL("""INSERT INTO answer (submission_time,vote_number,question_id,message,image) 
-        VALUES (CURRENT_TIMESTAMP, 0, {question_id}, {answer_message}, {answer_image})""").format
-                   (answer_message=sql.Literal(answer['message']),
-                    answer_image=sql.Literal(answer['image']),
-                    question_id=sql.Literal(question_id)))
+        VALUES (CURRENT_TIMESTAMP, 0, {question_id}, {answer_message}, {answer_image})""").format(
+        answer_message=sql.Literal(answer['message']),
+        answer_image=sql.Literal(answer['image']),
+        question_id=sql.Literal(question_id))
+    )
 
 
 @database_common.connection_handler
 def post_comment(cursor, comment, id, idtype):
     cursor.execute(sql.SQL("""INSERT INTO comment ({idtype}, message, submission_time, edited_count)
     VALUES ({id},{message}, CURRENT_TIMESTAMP, 0)""").format(
-        idtype = sql.SQL(idtype),
-        id = sql.Literal(id),
-        message = sql.Literal(comment)
-    ))
+        idtype=sql.SQL(idtype),
+        id=sql.Literal(id),
+        message=sql.Literal(comment))
+    )
 
 @database_common.connection_handler
 def sort_data(cursor, header, reversed):
@@ -143,12 +149,16 @@ def vote_message(cursor, id, dataset, vote):
     cursor.execute(query)
 
 
-def checkinput(text):
-    # TODO add a single quote to every single quote that is on its own.
-    return text
-
-
 @database_common.connection_handler
-def search(text):
-    query = f"""SELECT * FROM question WHERE LIKE'%'{text};"""
-    pass
+def search(cursor, text):
+    cursor.execute(sql.SQL("""SELECT * FROM question WHERE title
+        ILIKE {text} or message ILIKE {text}; """).format(
+        text=sql.Literal(f"%{text}%"))
+    )
+    content = cursor.fetchall()
+    cursor.execute(sql.SQL("""SELECT * FROM question WHERE id IN (SELECT question_id FROM answer WHERE title
+            ILIKE {text} or message ILIKE {text})""").format(
+        text=sql.Literal(f"%{text}%"))
+    )
+    content2 = cursor.fetchall()
+    return content, content2
