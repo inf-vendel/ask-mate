@@ -64,9 +64,9 @@
         </tr>
     {% endfor %}
     <h2>Search something</h2>
-    <form action="/search" method="POST">
+    <form action="/search" method="GET">
         <p>
-            <textarea name="search" type="text" required title="Search for something!"></textarea>
+            <textarea name="search_phrase" type="text" required title="Search for something!"></textarea>
         </p>
         <p>
             <button type="submit">Search</button>

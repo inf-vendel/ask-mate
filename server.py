@@ -136,15 +136,12 @@ def delete_question_comment(question_id, comment_id):
     return render_template('question.html')
 
 
-@app.route("/search", methods=['GET', 'POST'])
+@app.route("/search")
 def search():
-    if request.method == 'POST':
-        print('lol')
-        arg = request.form.to_dict()
-        search_phrase = arg['search']
-        q,a = data_manager.search(search_phrase)
-        return render_template('list.html',
-                               question_list=q, answer_list=a, header=connection.QUESTION_HEADER)
+    search_phrase = request.args.get('search_phrase')
+    q,a = data_manager.search(search_phrase)
+    return render_template('list.html',
+                           question_list=q, answer_list=a, header=connection.QUESTION_HEADER)
 
 
 if __name__ == "__main__":
@@ -152,14 +149,3 @@ if __name__ == "__main__":
         port=5000,
         debug=True,
     )
-
-
-
-# @app.route("/question/<question_id>/delete")
-# @app.route("/question/<question_id>/edit")
-# @app.route("/question/<question_id>/vote_up")
-# @app.route("/question/<question_id>/vote_down")
-# # Sorting: /list?order_by=title&order_direction=desc
-# @app.route("/answer/<answer_id>/delete")
-# @app.route("/answer/<answer_id>/vote_up")
-# @app.route("/answer/<answer_id>/vote_down")

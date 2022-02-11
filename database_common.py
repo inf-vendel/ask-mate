@@ -6,10 +6,6 @@ import psycopg2
 import psycopg2.extras
 
 
-os.environ['PSQL_USER_NAME'] = "adam"
-os.environ['PSQL_PASSWORD'] = "codecool"
-os.environ['PSQL_HOST'] = "localhost"
-os.environ['PSQL_DB_NAME'] = "askmate2"
 
 def get_connection_string():
     # setup connection string
