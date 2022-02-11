@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
-@app.route("/list", methods=['GET', 'POST'])
+@app.route("/list")
 def list_questions(order_by="id", order_direction="desc"):
     order_by = request.args.get('order_by')
     order_direction = request.args.get('order_direction')
@@ -18,7 +18,7 @@ def list_questions(order_by="id", order_direction="desc"):
                            question_list=list, header=connection.QUESTION_HEADER)
 
 
-@app.route("/question/<int:id>", methods=['GET', 'POST'])
+@app.route("/question/<int:id>")
 def display_question(id):
     question = data_manager.get_question_by_id(id)
     comments = data_manager.get_comments_by_id('question_id', id)
@@ -27,7 +27,7 @@ def display_question(id):
     for reply in answer:
         reply["comments"] = (data_manager.get_comments_by_id('answer_id', reply['id']))
     data_manager.count_view(id)
-    return render_template('question.html', comments = comments, result=question,
+    return render_template('question.html', comments=comments, result=question,
                            answer_list=answer, header=header, question_id=id)
 
 
@@ -83,7 +83,6 @@ def post_answer(question_id):
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
 def edit_question(question_id):
     question = data_manager.get_question_by_id(question_id)
-    print(question)
     if request.method == 'POST':
         result = request.form.to_dict()
         data_manager.edit_question(question_id, result)
