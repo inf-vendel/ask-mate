@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
-    <meta charset="UTF-8">
-    <title>Fast Foxes</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	<meta charset="utf-8"/>
+	<title>FastFox inc.</title>
+	<meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="Webflow" name="generator"/>
 </head>
-<body>
-<h1>Fast Foxes</h1>
-<a href="{{ url_for('ask_question') }}" title="Don't panic! We are supportive and fast like a fox!">Ask a Question</a>
-
+<body class="body">
+<div data-wf-quick-add-section="nav" class="section-2 wf-section">
+	<div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" data-doc-height="1" role="banner" class="navbar-light w-nav">
+		<div class="container-light-nav w-container">
+		<a href="#" class="navbar-light-brand w-nav-brand"><div class="company-name-block">Company Name</div></a>
+		<nav role="navigation" class="nav-menu w-nav-menu">
+			<form action="/search" class="search w-form" method="GET">
+				<input name="search_phrase" type="search" class="search-input w-input" maxlength="256" name="query" placeholder="Search…" id="search" required=""/>
+				<input type="submit" value="Search" class="search-button w-button"/>
+			</form>
+			<a href="{{ url_for('ask_question') }}" title="Don't panic! We are supportive and fast like a fox!" class="navbar-light-bold-link w-nav-link">Ask a question!</a>
+			<a href="#" class="navbar-light-bold-link w-nav-link">Work</a>
+			<a href="#" class="navbar-light-bold-link w-nav-link">Blog</a>
+			<a href="#" class="navbar-light-navbutton w-button">Contact</a>
+		</nav>
+		<div class="menu-button w-nav-button">
+			<div class="navbar-light-icon w-icon-nav-menu">
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+<div data-wf-quick-add-section="body" class="section wf-section">
+	<div>____</div>
+	{# Here goes the main part!!#}
 <table>
     <thead>
     <tr>
@@ -63,16 +84,23 @@
         </td>
         </tr>
     {% endfor %}
-    <h2>Search something</h2>
-    <form action="/search" method="GET">
-        <p>
-            <textarea name="search_phrase" type="text" required title="Search for something!"></textarea>
-        </p>
-        <p>
-            <button type="submit">Search</button>
-    </form>
     </tbody>
     </thead>
 </table>
-</body>
-</html>
+	<div>____</div>
+</div>
+<div class="wf-section">
+<div class="footer-with-links-wrap">
+	<div>
+		<a href="https://webflow.com" target="_blank" class="webflow-link w-inline-block">
+			<img src="https://uploads-ssl.webflow.com/6155c8d8ba26e676ac2032b2/6155c8d8ba26e676ac2032e3_webflow-w-small%402x.png" width="15" alt="" class="webflow-logo-tiny"/>
+			<div class="paragraph-tiny">Powered by FastFoxes</div>
+		</a>
+	</div>
+	<div class="footer-links">
+		<a href="https://www.facebook.com/" target="_blank" class="footer-item">Facebook</a>
+		<a href="https://www.twitter.com/" target="_blank" class="footer-item">Twitter</a>
+		<a href="https://www.instagram.com/" target="_blank" class="footer-item">Instagram</a>
+	</div>
+</div>
+</div>
