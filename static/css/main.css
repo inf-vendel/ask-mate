@@ -367,6 +367,19 @@
   }
 }
 
+#right_div {
+  width: 23.33%;
+  float: right;
+}
+#middle_div {
+  width: 53.33%;
+  margin: 0 auto;
+}
+#left_div {
+  width: 23.33%;
+  float: left;
+}
+
 @media screen and (max-width: 767px) {
   .container-light-nav {
     display: -webkit-box;

@@ -10,7 +10,7 @@
 <div data-wf-quick-add-section="nav" class="section-2 wf-section">
 	<div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" data-doc-height="1" role="banner" class="navbar-light w-nav">
 		<div class="container-light-nav w-container">
-		<a href="#" class="navbar-light-brand w-nav-brand"><div class="company-name-block">Company Name</div></a>
+		<a href="/list" class="navbar-light-brand w-nav-brand"><div class="company-name-block">Fast Fox Inc.</div></a>
 		<nav role="navigation" class="nav-menu w-nav-menu">
 			<form action="/search" class="search w-form" method="GET">
 				<input name="search_phrase" type="search" class="search-input w-input" maxlength="256" name="query" placeholder="Search…" id="search" required=""/>
@@ -29,8 +29,9 @@
 	</div>
 </div>
 <div data-wf-quick-add-section="body" class="section wf-section">
-	<div>____</div>
+	<div id="left_div">Some basic shit can be shown here.</div>
 	{# Here goes the main part!!#}
+<div id="middle_div">
 <table>
     <thead>
     <tr>
@@ -52,7 +53,7 @@
                     <td><a href="{{ url_for('display_question', id=question['id']) }}" title="Open this question">{{ value }}</a></td>
                 {% elif key == 'image' %}
                     <td>
-                        <img src="{{ url_for('static', filename='no-image-icon-0.jpg') }}" alt="uwu" height="100">
+                        <img src="{{ url_for('static', filename='no-image-icon-0.jpg') }}" alt="uwu" width="100">
                     </td>
                 {% else %}
                     <td>{{ value }}</td>
@@ -72,7 +73,7 @@
                 <td><a href="{{ url_for('display_question', id=question['id']) }}">{{ value }}</a></td>
             {% elif key == 'image' %}
                 <td>
-                    <img src="{{ url_for('static', filename='no-image-icon-0.jpg') }}" alt="uwu" height="100">
+                    <img src="{{ url_for('static', filename='no-image-icon-0.jpg') }}" alt="uwu" width="100">
                 </td>
             {% else %}
                 <td>{{ value }}</td>
@@ -87,7 +88,8 @@
     </tbody>
     </thead>
 </table>
-	<div>____</div>
+</div>
+	<div id="right_div">Tags & infos go here...</div>
 </div>
 <div class="wf-section">
 <div class="footer-with-links-wrap">
