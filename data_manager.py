@@ -5,6 +5,7 @@ from typing import List, Dict
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 import database_common
+from markupsafe import Markup
 
 
 QUESTION_HEADER = ["id", "submission_time", "view_number", "vote_number", "title", "message", "image"]
@@ -49,6 +50,35 @@ def get_comments_by_id(cursor, idtype, id):
     content = cursor.fetchall()
     return content
 
+
+@database_common.connection_handler
+def get_all_tag(cursor):
+    cursor.execute(sql.SQL("SELECT name FROM tag"))
+    tags = cursor.fetchall()
+    tags_list = []
+    for tag in tags:
+        tags_list.append(tag['name'])
+    return tags_list
+
+
+@database_common.connection_handler
+def get_tags(cursor, question_id):
+    cursor.execute(sql.SQL("""SELECT tag.name, tag.id FROM tag INNER JOIN question_tag ON (question_tag.tag_id = tag.id)
+                           WHERE question_tag.question_id = {question_id}""").format(
+        question_id=sql.Literal(question_id)
+    ))
+    # cursor.execute(sql.SQL("""SELECT tag.name FROM question_tag, tag WHERE question_tag.question_id = {question_id}""").format(
+    #     question_id=sql.Literal(question_id)
+    # ))
+    tags = cursor.fetchall()
+    return tags
+
+@database_common.connection_handler
+def delete_tag(cursor, question_id, tag_id):
+    cursor.execute(sql.SQL("DELETE FROM question_tag WHERE question_id = {question_id} AND tag_id={tag_id}").format(
+        question_id=sql.Literal(question_id),
+        tag_id=sql.Literal(tag_id))
+    )
 
 def realdict_to_dict(d):
     new_d = []
@@ -174,15 +204,32 @@ def vote_message(cursor, id, dataset, vote):
 
 
 @database_common.connection_handler
-def search(cursor, text):
+def search(cursor, text, tables):
+    print(tables)
     cursor.execute(sql.SQL("""SELECT * FROM question WHERE title
         ILIKE {text} or message ILIKE {text}; """).format(
         text=sql.Literal(f"%{text}%"))
     )
-    content = cursor.fetchall()
+    question_list = cursor.fetchall()
     cursor.execute(sql.SQL("""SELECT * FROM question WHERE id IN (SELECT question_id FROM answer WHERE title
             ILIKE {text} or message ILIKE {text})""").format(
         text=sql.Literal(f"%{text}%"))
     )
-    content2 = cursor.fetchall()
-    return content, content2
+    answer_list = cursor.fetchall()
+    question_list_marked = highlight_search_results(question_list, text)
+    return question_list_marked, answer_list
+
+
+def highlight_search_results(content, expression):
+    for i, row in enumerate(content):
+        new_text = []
+        for col in row:
+            if col in ['title', 'message']:
+                for word in row[col].split():
+                    if expression.lower() == word.lower():
+                        new_text.append(f'<mark>{word}</mark>')
+                    else:
+                        new_text.append(word)
+                content[i][col] = Markup(" ".join(new_text))
+
+    return content

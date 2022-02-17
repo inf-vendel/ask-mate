@@ -27,8 +27,10 @@ def display_question(id):
     for reply in answer:
         reply["comments"] = (data_manager.get_comments_by_id('answer_id', reply['id']))
     data_manager.count_view(id)
+    tags = data_manager.get_tags(id)
+    all_tags = data_manager.get_all_tag()
     return render_template('question.html', comments=comments, result=question,
-                           answer_list=answer, header=header, question_id=id)
+                           answer_list=answer, header=header, question_id=id, tags=tags, all_tags=all_tags)
 
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
@@ -45,6 +47,24 @@ def delete_answer(answer_id, question_id):
         data_manager.delete_row(answer_id, 'answer')
         return redirect(f'/question/{question_id}')
     return render_template('question.html', question_id=question_id)
+
+
+@app.route("/question/<question_id>/tag/<tag_id>/delete", methods=['GET', 'POST'])
+def remove_tag(question_id, tag_id):
+    if request.method == 'GET':
+        data_manager.delete_tag(question_id, tag_id)
+        return redirect(f'/question/{question_id}')
+    return render_template('question.html', question_id=question_id)
+
+
+@app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
+def add_tag(question_id):
+    # tags = data_manager.get_tags(question_id)
+    tags = data_manager.get_all_tag()
+    question = data_manager.get_question_by_id(question_id)
+    if request.method == 'POST':
+        pass
+    return render_template('new-tag.html', question=question, tags=tags)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -167,9 +187,20 @@ def delete_question_comment(question_id, comment_id):
 def search():
     search_phrase = request.args.get('search_phrase')
     tables = request.args.getlist('search_in')
-    q,a = data_manager.search(search_phrase)
+    q,a = data_manager.search(search_phrase, tables)
     return render_template('list.html',
                            question_list=q, answer_list=a, header=connection.QUESTION_HEADER)
+
+
+@app.route("/question/<question_id>/new_tag", methods=['GET', 'POST'])
+def new_tag(question_id):
+    if request.method == 'POST':
+        print('POST', request.form['new_tag'])
+        return redirect(f'/question/{question_id}')
+    if request.method == 'GET':
+        print('GET', request.form['new_tag'])
+        return redirect(f'/question/{question_id}')
+    return render_template('question.html', question_id=question_id)
 
 
 if __name__ == "__main__":

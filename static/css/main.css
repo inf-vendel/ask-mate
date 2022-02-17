@@ -499,6 +499,9 @@ tr:hover {
   padding: 100px;
   border-bottom: 3px dashed #bbb;
 }
+.question_body:hover {
+  background-color: #ffe9cf;
+}
 
 .answer-wrapper {
   border-left: 3px dashed #f0cda1;
@@ -590,4 +593,38 @@ tr:hover {
 }
 .search_options label {
   display: inline;
+}
+
+.tag {
+  display: inline;
+  padding: 10px;
+  background-color: #9c4c2f;
+  border-radius: 12px;
+  color: #f5d0b3;
+}
+.tag a {
+  color: white;
+  font-size: large;
+  padding: 5px;
+  text-decoration: none;
+}
+.tag a:hover {
+  color: red;
+  background-color: inherit;
+}
+.add_tag {
+  color:black;
+  font-size: x-large;
+  padding: 7px;
+  text-decoration: none;
+}
+.add_tag:hover {
+  color: silver;
+  background-color: inherit;
+  font-size: x-large;
+}
+.tag_input {
+  background-color: inherit;
+  min-width: 20px;
+  width: fit-content;
 }

@@ -35,7 +35,27 @@
 	</div>
 </div>
 <div data-wf-quick-add-section="body" class="section wf-section">
-	<div id="left_div">Some basic shit can be shown here.</div>
+	<div id="left_div">
+        <div class="question_tags">
+            {% for tag in tags %}
+                <div class="tag">{{ tag['name'] }}<a href="{{ url_for('remove_tag', question_id=question_id, tag_id=tag['id']) }}" title="Delete tag"><i class="fa-solid fa-delete-left"></i></a></div>
+            {% endfor %}
+{#            <a href="{{ url_for('add_tag', question_id=question_id) }}" class="add_tag"><i class="fa-solid fa-square-plus"></i></a>#}
+            <form class="tag tag_input" action="/question/{{ question_id }}/new_tag" method="POST" enctype=multipart/form-data>
+                <input class="tag add_tag tag_input" name="new_tag" type="text" id="new_tag" list="suggestions" required>
+                <datalist id="suggestions">
+                    {% for tag in all_tags %}
+                        <option value="{{ tag }}">{{ tag }}</option>
+                    {% endfor %}
+                </datalist>
+{#                <a type="submit" href="{{ url_for('new_tag', question_id=question_id) }}" class="add_tag"><i class="fa-solid fa-square-plus"></i></a>#}
+                <button type="submit" class="tag add_tag"><i class="fa-solid fa-square-plus"></i></button>
+{#                <input type="submit" value="ADD" />#}
+            </form>
+        </div>
+
+
+    </div>
 	{# Here goes the main part!!#}
 <div id="middle_div">
     <div class="question_container">
@@ -76,7 +96,7 @@
                             <time class="datetime">({{ comment['submission_time'] }})</time>
                             <div class="comment_message">{{ comment['message'] }}
                                 <i>
-                                    {% if comment['edited_count'] > 0 %}
+                                    {% if comment['edited_count'] %}
                                         (edited {{ comment['edited_count'] }} times)
                                     {% endif %}
                                 </i>
