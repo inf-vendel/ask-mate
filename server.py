@@ -54,7 +54,7 @@ def ask_question():
         file = request.files['image']
         if file:
             filename = secure_filename(file.filename)
-            file.save(os.path.join('static', filename))
+            file.save(os.path.join('static/', filename))
             result['image'] = filename
         else:
             result['image'] = "no-image-icon-0.jpg"
@@ -72,6 +72,7 @@ def post_answer(question_id):
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join('static', filename))
+            # TODO file cannot be saved!
             result['image'] = filename
         else:
             result['image'] = "no-image-icon-0.jpg"
@@ -90,10 +91,37 @@ def edit_question(question_id):
     return render_template('edit_question.html', question_id=question_id, question=question)
 
 
+@app.route("/answer/<answer_id>/edit", methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    answer = data_manager.get_answer_by_id(answer_id)
+    question = data_manager.get_question_by_id(answer['question_id'])
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_manager.edit_answer(answer_id, result)
+        return redirect(f'/question/{answer["question_id"]}')
+    return render_template('edit_answer.html', answer=answer, question=question)
+
+
+@app.route("/comment/<comment_id>/edit", methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    comment = data_manager.get_comment_by_id(comment_id)
+    if comment['question_id']:
+        question_id = comment['question_id']
+    else:
+        question_id = data_manager.get_answer_by_id(comment['answer_id'])['question_id']
+
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        data_manager.edit_comment(comment_id, result)
+        return redirect(f'/question/{question_id}')
+    return render_template('edit_comment.html', comment=comment)
+
+
 @app.route('/question/<question_id>/<vote_type>')
 def vote_question(question_id, vote_type):
     data_manager.vote_message(question_id, 'question', vote=int(vote_type))
-    return redirect('/list')
+    return redirect(f'/question/{question_id}')
+
 
 
 @app.route("/question/<int:question_id>/answer/<answer_id>/vote_up", methods=['GET', 'POST'])
@@ -138,6 +166,7 @@ def delete_question_comment(question_id, comment_id):
 @app.route("/search")
 def search():
     search_phrase = request.args.get('search_phrase')
+    tables = request.args.getlist('search_in')
     q,a = data_manager.search(search_phrase)
     return render_template('list.html',
                            question_list=q, answer_list=a, header=connection.QUESTION_HEADER)

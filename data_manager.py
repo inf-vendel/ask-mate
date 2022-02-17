@@ -32,7 +32,7 @@ def get_question_by_id(cursor, id):
 
 @database_common.connection_handler
 def get_answers_by_id(cursor, idtype, id):
-    cursor.execute(sql.SQL("SELECT * FROM answer WHERE {col}={id}").format(
+    cursor.execute(sql.SQL("SELECT * FROM answer WHERE {col}={id} ORDER BY submission_time").format(
         col=sql.SQL(idtype),
         id=sql.Literal(id))
     )
@@ -122,12 +122,36 @@ def edit_question(cursor, question_id, new_question_data):
 
 
 @database_common.connection_handler
+def edit_answer(cursor, answer_id, new_answer_data):
+    query = f"""UPDATE answer SET message = '{new_answer_data['message']}' WHERE id = {answer_id};"""
+    data = {'answer_id': answer_id, 'new_answer_data': new_answer_data}
+    cursor.execute(query, data)
+
+
+@database_common.connection_handler
+def edit_comment(cursor, comment_id, new_comment_data):
+    query = f"""UPDATE comment SET edited_count = edited_count + 1, message = '{new_comment_data['message']}' WHERE id = {comment_id};"""
+    data = {'comment_id': comment_id, 'new_comment_data': new_comment_data}
+    cursor.execute(query, data)
+
+
+@database_common.connection_handler
 def get_answer_by_id(cursor, id):
-    query = f"""SELECT title, message FROM answer WHERE id={id}"""
+    query = f"""SELECT * FROM answer WHERE id={id}"""
     data = {'id': id}
     cursor.execute(query, data)
     cur = cursor.fetchall()
     return realdict_to_dict(cur)
+
+
+@database_common.connection_handler
+def get_comment_by_id(cursor, id):
+    query = f"""SELECT * FROM comment WHERE id={id}"""
+    data = {'id': id}
+    cursor.execute(query, data)
+    cur = cursor.fetchall()
+    return realdict_to_dict(cur)
+
 
 
 @database_common.connection_handler

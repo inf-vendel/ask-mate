@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ answer['message'] }} FastFox</title>
+</head>
+<body>
+<form action="/answer/{{ answer['id'] }}/edit" method="POST" enctype=multipart/form-data>
+        <h3>Question: {{question['title'], question['message']}}</h3>
+    <p><label for="message">Answer:</label><br>
+        <textarea name="message" type="text" required>{{ answer['message'] }}</textarea>
+    </p>
+    <p>
+        <button type="submit">Save changes</button>
+    </p>
+</form>
+</body>
+</html>

@@ -3,66 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <title>FastFox</title>
+    <script src="https://kit.fontawesome.com/d62d9d9e29.js" crossorigin="anonymous"></script>
+    <title>{{ result['title'] }} - FastFox</title>
 </head>
 <body>
-<h1>FastFox</h1>
-<a href="{{ url_for('list_questions') }}">Back to Main Page</a>
+
+</body>
+</html>
+
+
+<body class="body">
+<div data-wf-quick-add-section="nav" class="section-2 wf-section">
+	<div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" data-doc-height="1" role="banner" class="navbar-light w-nav">
+		<div class="container-light-nav w-container">
+		<a href="/list" class="navbar-light-brand w-nav-brand"><div class="company-name-block">Fast Fox Inc.</div></a>
+		<nav role="navigation" class="nav-menu w-nav-menu">
+			<form action="/search" class="search w-form" method="GET">
+				<input name="search_phrase" type="search" class="search-input w-input" maxlength="256" name="query" placeholder="Search…" id="search" required=""/>
+				<input type="submit" value="Search" class="search-button w-button"/>
+			</form>
+			<a href="{{ url_for('ask_question') }}" title="Don't panic! We are supportive and fast like a fox!" class="navbar-light-bold-link w-nav-link">Ask a question!</a>
+			<a href="#" class="navbar-light-bold-link w-nav-link">Show 5 latest/See all</a>
+			<a href="#" class="navbar-light-bold-link w-nav-link">Blog</a>
+			<a href="#" class="navbar-light-navbutton w-button">Contact</a>
+		</nav>
+		<div class="menu-button w-nav-button">
+			<div class="navbar-light-icon w-icon-nav-menu">
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+<div data-wf-quick-add-section="body" class="section wf-section">
+	<div id="left_div">Some basic shit can be shown here.</div>
+	{# Here goes the main part!!#}
+<div id="middle_div">
+    <div class="question_container">
+        <div class="question_body">
+            <h2>{{ result['title'] }}</h2>
+            <p class="question-message">{{ result['message'] }}</p>
+        </div>
+        <div class="question_icons">
+            <a href="{{ url_for('edit_question', question_id=question_id) }}" title="Edit question"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a href="{{ url_for('delete_question', question_id=question_id) }}" title="Delete question"><i class="fa-solid fa-trash-can"></i></a>
+            <a href="{{ url_for('vote_question', question_id=question_id, vote_type=+1) }}" title="Vote this question up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
+            <a href="{{ url_for('vote_question', question_id=question_id, vote_type=-1) }}" title="Vote this question down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
+        </div>
+    </div>
+
+
 <table>
-    <h2>Question number {{ question_id }}</h2>
-    <thead>
-    <tr>
-        {% for head in header %}
-            <th>{{ ' '.join(head.split('_')).title() }}</th>
+    <h3 class="answer_header">Answers</h3>
+    <ul class="answer-wrapper">
+        {% for answer in answer_list %}
+            <li class="answer_container">
+            <div class="answer-body">
+
+                <div class="answer_menu">
+                    <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
+                    ({{ answer["vote_number"] }})
+                    <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
+                </div>
+                <div class="answer_content">
+                    <h4 class="answer-user">xy said:</h4>
+                    {{ answer["message"] }} <a href="{{ url_for('edit_answer', answer_id=answer['id']) }}" title="Edit answer"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{{ url_for('delete_answer', answer_id=answer['id'], question_id=question_id) }}" title="Delete answer"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+            </div>
+                {% for comment in answer['comments'] %}
+                    <ul>
+                        <div class="comment_container">
+                            <time class="datetime">({{ comment['submission_time'] }})</time>
+                            <div class="comment_message">{{ comment['message'] }}
+                                <i>
+                                    {% if comment['edited_count'] > 0 %}
+                                        (edited {{ comment['edited_count'] }} times)
+                                    {% endif %}
+                                </i>
+                            </div>
+                        </div>
+                        <div class="comment_menu">
+
+                            <a href="{{ url_for('edit_comment', comment_id=comment['id']) }}" title="Edit comment"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" title="Delete comment"><i class="fa-solid fa-trash-can"></i></a>
+
+                        </div>
+                    </ul>
+                {% endfor %}
+                <a href="{{ url_for('add_comment_to_answer', question_id=question_id, answer_id=answer['id']) }}">Comment</a>
+            </li>
         {% endfor %}
-        <a href="{{ url_for('add_comment_to_question', question_id=question_id) }}">Comment</a>
-    </tr>
-    <tbody>
-    <tr>
-        {% for value in result %}
-            <td>{{ result[value] }}</td>
-        {% endfor %}
-    </tr>
-    </tbody>
-    </thead>
+    </ul>
 </table>
-<h2>Comments</h2>
+<a href="{{ url_for('post_answer', question_id=question_id) }}">Post an Answer</a>
+
+
+</div>
+	<div id="right_div">
+
+        <h3>Comments <a href="{{ url_for('add_comment_to_question', question_id=question_id) }}"><i class="fa-solid fa-feather"></i></a> </h3>
     <tbody>
     <tr>
         {% for comment in comments %}
             <li class="comment">{{ comment["message"] }}
                 <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"] }}</time>
                 <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}">
-                    Delete comment
-                </a></li>
+                    <i class="fa-solid fa-trash-can"></i></a>
+                {# TODO create comment editor route               #}
+                <a href=""><i class="fa-solid fa-pen-to-square"></i></a>
+            </li>
         {% endfor %}
     </tr>
     </tbody>
-<table>
-    <h2>Answers</h2>
-    <ol>
-        {% for answer in answer_list %}
-            <li>
-                {{ answer["message"] }} <a
-                    href="{{ url_for('delete_answer', answer_id=answer['id'], question_id=question_id) }}">Delete
-                Answer</a>
-                <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id']) }}">👍</a>
-                <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id']) }}">👎</a>
-                ({{ answer["vote_number"] }})
-                {% for comment in answer['comments'] %}
-                    <ul>{{ comment['message'] }} <time class="datetime">({{ comment['submission_time'] }})</time>
-                    <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}">
-                        Delete comment
-                    </a>
-                    </ul>
-                {% endfor %}
-                <a href="{{ url_for('add_comment_to_answer', question_id=question_id, answer_id=answer['id']) }}">Comment</a>
-            </li>
-        {% endfor %}
-    </ol>
-</table>
-<a href="{{ url_for('post_answer', question_id=question_id) }}">Post an Answer</a>
-<a href="{{ url_for('delete_question', question_id=question_id) }}">Delete Question</a>
-<a href="{{ url_for('edit_question', question_id=question_id) }}">Edit Question</a>
-</body>
-</html>
+
+    </div>
+</div>
+<div class="wf-section">
+<div class="footer-with-links-wrap">
+	<div>
+		<a href="https://webflow.com" target="_blank" class="webflow-link w-inline-block">
+			<img src="https://uploads-ssl.webflow.com/6155c8d8ba26e676ac2032b2/6155c8d8ba26e676ac2032e3_webflow-w-small%402x.png" width="15" alt="" class="webflow-logo-tiny"/>
+			<div class="paragraph-tiny">Powered by FastFoxes</div>
+		</a>
+	</div>
+	<div class="footer-links">
+		<a href="https://www.facebook.com/" target="_blank" class="footer-item">Facebook</a>
+		<a href="https://www.twitter.com/" target="_blank" class="footer-item">Twitter</a>
+		<a href="https://www.instagram.com/" target="_blank" class="footer-item">Instagram</a>
+	</div>
+</div>
+</div>
