@@ -624,6 +624,7 @@ tr:hover {
   font-size: x-large;
 }
 .tag_input {
+  display: inline-block;
   background-color: inherit;
   min-width: 20px;
   width: fit-content;
