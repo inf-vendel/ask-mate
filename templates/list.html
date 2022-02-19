@@ -55,7 +55,6 @@
         {% for head in header %}
             <th>
                 {{ ' '.join(head.split('_')).title() }}
-                <form action="/list" methods=['GET','POST']></form>
                 <a href="{{ url_for('list_questions', order_by=head, order_direction='DESC') }}">▲</a>
                 <a href="{{ url_for('list_questions', order_by=head, order_direction='ASC') }}">▼</a>
             </th>
@@ -80,26 +79,6 @@
                 <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}" title="Vote this question up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
                 <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}"title="Vote this question down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
             </td>
-        </tr>
-    {% endfor %}
-
-    {% for question in answer_list %}
-    <tr class="secondary">
-        {% for key,value in question.items() %}
-            {% if key == 'id' %}
-                <td><a href="{{ url_for('display_question', id=question['id']) }}">{{ value }}</a></td>
-            {% elif key == 'image' %}
-                <td>
-                    <img src="{{ url_for('static', filename='no-image-icon-0.jpg') }}" alt="uwu" width="100">
-                </td>
-            {% else %}
-                <td>{{ value }}</td>
-            {% endif %}
-        {% endfor %}
-        <td>
-            <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}" title="Vote this question up!">👍</a>
-            <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}"title="Vote this question down!">👎</a>
-        </td>
         </tr>
     {% endfor %}
     </tbody>

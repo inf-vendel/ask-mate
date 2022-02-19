@@ -433,6 +433,15 @@ h1 {
   color: navy;
   margin-left: 20px;
 }
+a {
+  text-decoration: none;
+}
+a:active {
+  color: inherit;
+}
+a:visited {
+  color:inherit;
+}
 a:hover {
   font-size: large;
   background-color: rgba(180, 240, 172, 50);
