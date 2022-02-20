@@ -41,7 +41,7 @@
                 <div class="tag">{{ tag['name'] }}<a href="{{ url_for('remove_tag', question_id=question_id, tag_id=tag['id']) }}" title="Delete tag" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-delete-left"></i></a></div>
             {% endfor %}
 {#            <a href="{{ url_for('add_tag', question_id=question_id) }}" class="add_tag"><i class="fa-solid fa-square-plus"></i></a>#}
-            <form class="tag tag_input" action="/question/{{ question_id }}/new_tag" method="POST" enctype=multipart/form-data>
+            <form class="tag tag_input" action="{{ url_for('add_tag', question_id=question_id) }}" method="POST" enctype=multipart/form-data>
                 <input class="tag add_tag tag_input" name="new_tag" type="text" id="new_tag" list="suggestions" required>
                 <datalist id="suggestions">
                     {% for tag in all_tags %}

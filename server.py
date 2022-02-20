@@ -57,14 +57,16 @@ def remove_tag(question_id, tag_id):
     return render_template('question.html', question_id=question_id)
 
 
-@app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
+@app.route("/question/<question_id>", methods=['GET', 'POST'])
 def add_tag(question_id):
     # tags = data_manager.get_tags(question_id)
     tags = data_manager.get_all_tag()
     question = data_manager.get_question_by_id(question_id)
     if request.method == 'POST':
-        pass
-    return render_template('new-tag.html', question=question, tags=tags)
+        print('End point reached.')
+        tag_name = request.form.get('new_tag')
+        data_manager.add_tag(question_id, tag_name)
+    return redirect(f'/question/{question_id}')
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -201,6 +203,7 @@ def new_tag(question_id):
         print('GET', request.form['new_tag'])
         return redirect(f'/question/{question_id}')
     return render_template('question.html', question_id=question_id)
+
 
 
 if __name__ == "__main__":

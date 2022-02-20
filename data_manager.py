@@ -62,6 +62,34 @@ def get_all_tag(cursor):
 
 
 @database_common.connection_handler
+def add_tag(cursor, question_id, tag_name):
+    cursor.execute(sql.SQL("SELECT id from tag WHERE name={tag_name}").format(
+        tag_name=sql.Literal(tag_name)))
+    tag = realdict_to_dict(cursor.fetchall())
+    if not tag:
+        create_tag(tag_name)
+        cursor.execute(sql.SQL("SELECT id from tag WHERE name={tag_name}").format(
+            tag_name=sql.Literal(tag_name)))
+        tag_id = realdict_to_dict(cursor.fetchall())['id']
+        cursor.execute(sql.SQL("INSERT INTO question_tag VALUES ({question_id}, {tag_id})").format(
+            question_id=sql.Literal(question_id),
+            tag_id=sql.Literal(tag_id),
+        ))
+    else:
+        tag_id = tag['id']
+        cursor.execute(sql.SQL("INSERT INTO question_tag VALUES ({question_id}, {tag_id})").format(
+            question_id=sql.Literal(question_id),
+            tag_id=sql.Literal(tag_id),
+        ))
+
+
+@database_common.connection_handler
+def create_tag(cursor, tag_name):
+    cursor.execute(sql.SQL("INSERT INTO tag (name) VALUES ({tag_name})").format(
+        tag_name=sql.Literal(tag_name)))
+
+
+@database_common.connection_handler
 def get_tags(cursor, question_id):
     cursor.execute(sql.SQL("""SELECT tag.name, tag.id FROM tag INNER JOIN question_tag ON (question_tag.tag_id = tag.id)
                            WHERE question_tag.question_id = {question_id}""").format(
