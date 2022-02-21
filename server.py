@@ -10,7 +10,7 @@ import bcrypt
 
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
-app.permanent_session_lifetime = timedelta(minutes=10)
+# app.permanent_session_lifetime = timedelta(minutes=10)
 
 
 @app.route('/')
@@ -49,6 +49,8 @@ def login():
     if request.method == 'POST':
         session['username'] = request.form['username']
         session['password'] = request.form['psw']
+        # TODO check if password is acceptable (length, special char, num)
+        # TODO check if username is acceptable (only abc,ABC,0-9)
         user = user_manager.authenticate_user(session['username'], session['password'])
         if user:
             flash(f'You successfully logged in! Welcome {session["username"]}')
@@ -62,7 +64,7 @@ def login():
         else:
             session.pop('username', None)
             session.pop('password', None)
-            flash('Invalid login attempt.')
+            flash(u'Invalid login attempt.', 'error')
             return redirect('login')
     else:
         if "id" in session:

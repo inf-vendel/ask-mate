@@ -47,7 +47,9 @@ def authenticate_user(cursor, username, password):
         username=sql.Literal(username),
     ))
     data = cursor.fetchall()
-    if hash.verify_password(password, data[0]['password']):
+    if not data:
+        return False
+    elif hash.verify_password(password, data[0]['password']):
         return data[0]['id']
     else:
         return False
