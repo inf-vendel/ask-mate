@@ -23,25 +23,25 @@ def list_questions(order_by="id", order_direction="desc", limit=0):
                            question_list=list, header=connection.QUESTION_HEADER)
 
 
-@app.route("login", methods=['POST', 'GET'])
-def login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        session['password'] = request.form['password']
-        # Authenticate!
-        database = data.users
-        if session['email'] in database and hashing.verify_password(session['password'], database[session['email']]):
-            flash('You just logged in! Welcome buddy!')
-            return redirect('index')
-        else:
-            session.pop('email', None)
-            session.pop('password', None)
-            flash('Invalid login attempt.')
-            return redirect('login')
-    else:
-        if "email" in session:
-            return redirect('index')
-    return render_template('login.html')
+# @app.route("login", methods=['POST', 'GET'])
+# def login():
+#     if request.method == 'POST':
+#         session['username'] = request.form['username']
+#         session['password'] = request.form['password']
+#         # Authenticate!
+#         database = data.users
+#         if session['email'] in database and hashing.verify_password(session['password'], database[session['email']]):
+#             flash('You just logged in! Welcome buddy!')
+#             return redirect('index')
+#         else:
+#             session.pop('email', None)
+#             session.pop('password', None)
+#             flash('Invalid login attempt.')
+#             return redirect('login')
+#     else:
+#         if "email" in session:
+#             return redirect('index')
+#     return render_template('login.html')
 
 
 
