@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Comment question</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %} Add Comment - FastFox {% endblock %}
+{% block left_div %}
+{% endblock %}
+{% block content %}
     <form action="/question/{{ question_id }}/new-comment" method="POST">
     <p>
       <label for="message">Comment:</label><br>
@@ -14,5 +12,6 @@
         <button type="submit">Send comment</button>
     </p>
 </form>
-</body>
-</html>
+{% endblock %}
+{% block right_div %}
+{% endblock %}

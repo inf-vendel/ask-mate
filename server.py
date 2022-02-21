@@ -1,21 +1,49 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import connection
 import data_manager
+from datetime import timedelta
 from werkzeug.utils import secure_filename
 import os
+import bcrypt
 
 app = Flask(__name__)
-
+app.secret_key = os.urandom(16)
+app.permanent_session_lifetime = timedelta(minutes=5)
 
 @app.route('/')
 @app.route("/list")
-def list_questions(order_by="id", order_direction="desc"):
+def list_questions(order_by="id", order_direction="desc", limit=0):
     order_by = request.args.get('order_by')
     order_direction = request.args.get('order_direction')
     question_list = data_manager.get_question_list()
+    # if limit:
+    #     question_list = question_list[0:limit]
     list = data_manager.sort_data(order_by, order_direction) if order_by and order_direction else question_list
     return render_template('list.html',
                            question_list=list, header=connection.QUESTION_HEADER)
+
+
+@app.route("login", methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        session['password'] = request.form['password']
+        # Authenticate!
+        database = data.users
+        if session['email'] in database and hashing.verify_password(session['password'], database[session['email']]):
+            flash('You just logged in! Welcome buddy!')
+            return redirect('index')
+        else:
+            session.pop('email', None)
+            session.pop('password', None)
+            flash('Invalid login attempt.')
+            return redirect('login')
+    else:
+        if "email" in session:
+            return redirect('index')
+    return render_template('login.html')
+
+
 
 
 @app.route("/question/<int:id>")

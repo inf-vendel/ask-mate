@@ -1,63 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <script src="https://kit.fontawesome.com/d62d9d9e29.js" crossorigin="anonymous"></script>
-    <title>{{ result['title'] }} - FastFox</title>
-</head>
-<body>
-
-</body>
-</html>
-
-
-<body class="body">
-<div data-wf-quick-add-section="nav" class="section-2 wf-section">
-	<div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" data-doc-height="1" role="banner" class="navbar-light w-nav">
-		<div class="container-light-nav w-container">
-		<a href="/list" class="navbar-light-brand w-nav-brand"><div class="company-name-block">Fast Fox Inc.</div></a>
-		<nav role="navigation" class="nav-menu w-nav-menu">
-			<form action="/search" class="search w-form" method="GET">
-				<input name="search_phrase" type="search" class="search-input w-input" maxlength="256" name="query" placeholder="Search…" id="search" required=""/>
-				<input type="submit" value="Search" class="search-button w-button"/>
-			</form>
-			<a href="{{ url_for('ask_question') }}" title="Don't panic! We are supportive and fast like a fox!" class="navbar-light-bold-link w-nav-link">Ask a question!</a>
-			<a href="#" class="navbar-light-bold-link w-nav-link">Show 5 latest/See all</a>
-			<a href="#" class="navbar-light-bold-link w-nav-link">Blog</a>
-			<a href="#" class="navbar-light-navbutton w-button">Contact</a>
-		</nav>
-		<div class="menu-button w-nav-button">
-			<div class="navbar-light-icon w-icon-nav-menu">
-			</div>
-		</div>
-		</div>
-	</div>
-</div>
-<div data-wf-quick-add-section="body" class="section wf-section">
-	<div id="left_div">
-        <div class="question_tags">
-            {% for tag in tags %}
-                <div class="tag">{{ tag['name'] }}<a href="{{ url_for('remove_tag', question_id=question_id, tag_id=tag['id']) }}" title="Delete tag" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-delete-left"></i></a></div>
-            {% endfor %}
+{% extends 'base.html' %}
+{% block title %}
+    {{ result['title'] }} - FastFox
+{% endblock %}
+{% block left_div %}
+<div class="question_tags">
+        {% for tag in tags %}
+            <div class="tag">{{ tag['name'] }}<a href="{{ url_for('remove_tag', question_id=question_id, tag_id=tag['id']) }}" title="Delete tag" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-delete-left"></i></a></div>
+        {% endfor %}
 {#            <a href="{{ url_for('add_tag', question_id=question_id) }}" class="add_tag"><i class="fa-solid fa-square-plus"></i></a>#}
-            <form class="tag tag_input" action="{{ url_for('add_tag', question_id=question_id) }}" method="POST" enctype=multipart/form-data>
-                <input class="tag add_tag tag_input" name="new_tag" type="text" id="new_tag" list="suggestions" required>
-                <datalist id="suggestions">
-                    {% for tag in all_tags %}
-                        <option value="{{ tag }}">{{ tag }}</option>
-                    {% endfor %}
-                </datalist>
+        <form class="tag tag_input" action="{{ url_for('add_tag', question_id=question_id) }}" method="POST" enctype=multipart/form-data>
+            <input class="tag add_tag tag_input" name="new_tag" type="text" id="new_tag" list="suggestions" required>
+            <datalist id="suggestions">
+                {% for tag in all_tags %}
+                    <option value="{{ tag }}">{{ tag }}</option>
+                {% endfor %}
+            </datalist>
 {#                <a type="submit" href="{{ url_for('new_tag', question_id=question_id) }}" class="add_tag"><i class="fa-solid fa-square-plus"></i></a>#}
-                <button type="submit" class="tag add_tag"><i class="fa-solid fa-square-plus"></i></button>
+            <button type="submit" class="tag add_tag"><i class="fa-solid fa-square-plus"></i></button>
 {#                <input type="submit" value="ADD" />#}
-            </form>
-        </div>
-
-
+        </form>
     </div>
-	{# Here goes the main part!!#}
-<div id="middle_div">
+{% endblock %}
+{% block content %}
     <div class="question_container">
         <div class="question_body">
             <h2>{{ result['title'] }}</h2>
@@ -116,40 +80,20 @@
     </ul>
 </table>
 <a href="{{ url_for('post_answer', question_id=question_id) }}">Post an Answer</a>
-
-
-</div>
-	<div id="right_div">
-
-        <h3>Comments <a href="{{ url_for('add_comment_to_question', question_id=question_id) }}"><i class="fa-solid fa-feather"></i></a> </h3>
+{% endblock %}
+{% block right_div %}
+    <h3>Comments <a href="{{ url_for('add_comment_to_question', question_id=question_id) }}"><i class="fa-solid fa-feather"></i></a> </h3>
     <tbody>
-    <tr>
-        {% for comment in comments %}
-            <li class="comment">{{ comment["message"] }}
-                <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"] }}</time>
-                <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" onclick="return confirm('Are you sure want to delete this?')">
-                    <i class="fa-solid fa-trash-can"></i></a>
-                {# TODO create comment editor route               #}
-                <a href=""><i class="fa-solid fa-pen-to-square"></i></a>
-            </li>
-        {% endfor %}
-    </tr>
+        <tr>
+            {% for comment in comments %}
+                <li class="comment">{{ comment["message"] }}
+                    <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"] }}</time>
+                    <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" onclick="return confirm('Are you sure want to delete this?')">
+                        <i class="fa-solid fa-trash-can"></i></a>
+                    {# TODO create comment editor route               #}
+                    <a href=""><i class="fa-solid fa-pen-to-square"></i></a>
+                </li>
+            {% endfor %}
+        </tr>
     </tbody>
-
-    </div>
-</div>
-<div class="wf-section">
-<div class="footer-with-links-wrap">
-	<div>
-		<a href="https://webflow.com" target="_blank" class="webflow-link w-inline-block">
-			<img src="https://uploads-ssl.webflow.com/6155c8d8ba26e676ac2032b2/6155c8d8ba26e676ac2032e3_webflow-w-small%402x.png" width="15" alt="" class="webflow-logo-tiny"/>
-			<div class="paragraph-tiny">Powered by FastFoxes</div>
-		</a>
-	</div>
-	<div class="footer-links">
-		<a href="https://www.facebook.com/" target="_blank" class="footer-item">Facebook</a>
-		<a href="https://www.twitter.com/" target="_blank" class="footer-item">Twitter</a>
-		<a href="https://www.instagram.com/" target="_blank" class="footer-item">Instagram</a>
-	</div>
-</div>
-</div>
+{% endblock %}

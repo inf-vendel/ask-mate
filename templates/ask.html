@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>FastFox</title>
-</head>
-<body>
-<h1>Ask a Question</h1>
+{% extends 'base.html' %}
+{% block title %} Asking - FastFox{% endblock %}
+
+{% block left_div %}
+{% endblock %}
+
+{% block content %}
+    <h1>Ask a Question</h1>
 <form action="/add-question" method="POST" enctype=multipart/form-data>
     <p>
         <label for="title">Title:</label><br>
@@ -21,6 +21,7 @@
         <button type="submit">Submit question</button>
     </p>
 </form>
-<a href="{{ url_for('list_questions') }}">Back to Main Page</a>
-</body>
-</html>
+{% endblock %}
+
+{% block right_div %}
+{% endblock %}

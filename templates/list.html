@@ -1,33 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
-    <script src="https://kit.fontawesome.com/d62d9d9e29.js" crossorigin="anonymous"></script>
-	<meta charset="utf-8"/>
-	<title>FastFox inc.</title>
-</head>
-<body class="body">
-<div data-wf-quick-add-section="nav" class="section-2 wf-section">
-	<div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" data-doc-height="1" role="banner" class="navbar-light w-nav">
-		<div class="container-light-nav w-container">
-		<a href="/list" class="navbar-light-brand w-nav-brand"><div class="company-name-block">Fast Fox Inc.</div></a>
-		<nav role="navigation" class="nav-menu w-nav-menu">
-			<a href="{{ url_for('ask_question') }}" title="Don't panic! We are supportive and fast like a fox!" class="navbar-light-bold-link w-nav-link">Ask a question!</a>
-			<a href="#" class="navbar-light-bold-link w-nav-link">Show 5 latest/See all</a>
-			<a href="#" class="navbar-light-bold-link w-nav-link">Blog</a>
-			<a href="#" class="navbar-light-navbutton w-button">Contact</a>
-		</nav>
-		<div class="menu-button w-nav-button">
-			<div class="navbar-light-icon w-icon-nav-menu">
-			</div>
-		</div>
-		</div>
-	</div>
-</div>
-<div data-wf-quick-add-section="body" class="section wf-section">
-	<div id="left_div">
-	    <form action="/search" class="search_panel" method="GET">
+{% extends 'base.html' %}
+{% block title %} FastFox Inc. {% endblock %}
+{% block left_div %}
+    <form action="/search" class="search_panel" method="GET">
             <input name="search_phrase" type="search" class="search_input" maxlength="256" name="query" placeholder="Search…" id="search" required=""/>
             <div class="search_options">
                 <h3>Search in:</h3>
@@ -46,75 +20,57 @@
                 </div>
                 <input type="submit" value="Search" class="search_button"/>
             </div>
-        </form>
-    </div>
-<div id="middle_div">
-<table>
-    <thead>
-    <tr>
-        {% for head in header %}
-            <th>
-                {{ ' '.join(head.split('_')).title() }}
-                <a href="{{ url_for('list_questions', order_by=head, order_direction='DESC') }}">▲</a>
-                <a href="{{ url_for('list_questions', order_by=head, order_direction='ASC') }}">▼</a>
-            </th>
+    </form>
+{% endblock %}
 
-        {% endfor %}
-    </tr>
-    <tbody>
-    {% for question in question_list %}
+{% block content %}
+    <table>
+        <thead>
         <tr>
-            {% for key,value in question.items() %}
-                {% if key == 'id' %}
-                    <td><a href="{{ url_for('display_question', id=question['id']) }}" title="Open this question">{{ value }}</a></td>
-                {% elif key == 'image' %}
-                    <td>
-                        <img src="{{ url_for('static', filename=value if value else 'no-image-icon-0.jpg') }}" alt="uwu" width="100">
-                    </td>
-                {% else %}
-                    <td>{{ value }}</td>
-                {% endif %}
+            {% for head in header %}
+                <th>
+                    {{ ' '.join(head.split('_')).title() }}
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='DESC') }}">▲</a>
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='ASC') }}">▼</a>
+                </th>
+
             {% endfor %}
-            <td>
-                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}" title="Vote this question up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
-                <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}"title="Vote this question down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
-            </td>
         </tr>
-    {% endfor %}
-    </tbody>
-    </thead>
-</table>
-</div>
-	<div id="right_div">
-         <div class="grid-container">
-              <div class="grid-item">1</div>
-              <div class="grid-item">2</div>
-              <div class="grid-item">3</div>
-              <div class="grid-item">4</div>
-              <div class="grid-item">5</div>
-              <div class="grid-item">6</div>
-              <div class="grid-item">7</div>
-              <div class="grid-item">8</div>
-              <div class="grid-item">9</div>
-         </div>
+        <tbody>
+        {% for question in question_list %}
+            <tr>
+                {% for key,value in question.items() %}
+                    {% if key == 'id' %}
+                        <td><a href="{{ url_for('display_question', id=question['id']) }}" title="Open this question">{{ value }}</a></td>
+                    {% elif key == 'image' %}
+                        <td>
+                            <img src="{{ url_for('static', filename=value if value else 'no-image-icon-0.jpg') }}" alt="uwu" width="100">
+                        </td>
+                    {% else %}
+                        <td>{{ value }}</td>
+                    {% endif %}
+                {% endfor %}
+                <td>
+                    <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}" title="Vote this question up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
+                    <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}"title="Vote this question down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </thead>
+    </table>
+{% endblock %}
 
-    </div>
-</div>
-<div class="wf-section">
-<div class="footer-with-links-wrap">
-	<div>
-		<a href="https://webflow.com" target="_blank" class="webflow-link w-inline-block">
-			<img src="https://uploads-ssl.webflow.com/6155c8d8ba26e676ac2032b2/6155c8d8ba26e676ac2032e3_webflow-w-small%402x.png" width="15" alt="" class="webflow-logo-tiny"/>
-			<div class="paragraph-tiny">Powered by FastFoxes</div>
-		</a>
-	</div>
-	<div class="footer-links">
-		<a href="https://www.facebook.com/" target="_blank" class="footer-item">Facebook</a>
-		<a href="https://www.twitter.com/" target="_blank" class="footer-item">Twitter</a>
-		<a href="https://www.instagram.com/" target="_blank" class="footer-item">Instagram</a>
-	</div>
-</div>
-</div>
-</body>
-
-</html>
+{% block right_div %}
+     <div class="grid-container">
+          <div class="grid-item">1</div>
+          <div class="grid-item">2</div>
+          <div class="grid-item">3</div>
+          <div class="grid-item">4</div>
+          <div class="grid-item">5</div>
+          <div class="grid-item">6</div>
+          <div class="grid-item">7</div>
+          <div class="grid-item">8</div>
+          <div class="grid-item">9</div>
+     </div>
+{% endblock %}
