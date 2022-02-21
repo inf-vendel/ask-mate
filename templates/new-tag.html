@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ question['title'] }} - tags</title>
+</head>
+<body>
+<p>{{ question['title'] }}</p>
+<p>{{ question['message'] }}</p>
+<form action="#">
+    <input name="new_tag" type="text" id="new_tag" list="suggestions" required>
+    <datalist id="suggestions">
+        {% for tag in tags %}
+            <option value="{{ tag }}">{{ tag }}</option>
+        {% endfor %}
+    </datalist>
+    <input type="submit" value="ADD" />
+</form>
+
+</body>
+</html>

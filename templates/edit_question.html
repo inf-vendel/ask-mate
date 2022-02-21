@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Edit a Question</h1>
+    <form action="/question/{{ question_id }}/edit" method="POST" enctype=multipart/form-data>
+        <h2>Question number {{ question_id }}</h2>
+            <td><label for="title">Title:</label><br>
+                <input name="title" type="text" required value="{{ question['title'] }}" ></td>
+    <p><label for="message">Message:</label><br>
+        <textarea name="message" type="text" required>{{ question['message'] }}</textarea>
+    </p>
+    <p>
+        <label for="image" >Upload an image of your choice:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        <button type="submit">Save changes</button>
+    </p>
+    </form>
+</body>
+</html>

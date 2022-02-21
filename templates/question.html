@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ result['title'] }} - FastFox
+{% endblock %}
+{% block left_div %}
+<div class="question_tags">
+        {% for tag in tags %}
+            <div class="tag">{{ tag['name'] }}<a href="{{ url_for('remove_tag', question_id=question_id, tag_id=tag['id']) }}" title="Delete tag" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-delete-left"></i></a></div>
+        {% endfor %}
+{#            <a href="{{ url_for('add_tag', question_id=question_id) }}" class="add_tag"><i class="fa-solid fa-square-plus"></i></a>#}
+        <form class="tag tag_input" action="{{ url_for('add_tag', question_id=question_id) }}" method="POST" enctype=multipart/form-data>
+            <input class="tag add_tag tag_input" name="new_tag" type="text" id="new_tag" list="suggestions" required>
+            <datalist id="suggestions">
+                {% for tag in all_tags %}
+                    <option value="{{ tag }}">{{ tag }}</option>
+                {% endfor %}
+            </datalist>
+{#                <a type="submit" href="{{ url_for('new_tag', question_id=question_id) }}" class="add_tag"><i class="fa-solid fa-square-plus"></i></a>#}
+            <button type="submit" class="tag add_tag"><i class="fa-solid fa-square-plus"></i></button>
+{#                <input type="submit" value="ADD" />#}
+        </form>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="question_container">
+        <div class="question_body">
+            <h2>{{ result['title'] }}</h2>
+            <p class="question-message">{{ result['message'] }}</p>
+        </div>
+        <div class="question_icons">
+            <a href="{{ url_for('edit_question', question_id=question_id) }}" onclick="return confirm('Are you sure want to edit this?')" title="Edit question"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a href="{{ url_for('delete_question', question_id=question_id) }}" onclick="return confirm('Are you sure want to delete this?')" title="Delete question"><i class="fa-solid fa-trash-can"></i></a>
+            <a href="{{ url_for('vote_question', question_id=question_id, vote_type=+1) }}" title="Vote this question up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
+            <a href="{{ url_for('vote_question', question_id=question_id, vote_type=-1) }}" title="Vote this question down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
+        </div>
+    </div>
+
+
+<table>
+    <h3 class="answer_header">Answers</h3>
+    <ul class="answer-wrapper">
+        {% for answer in answer_list %}
+            <li class="answer_container">
+            <div class="answer-body">
+
+                <div class="answer_menu">
+                    <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
+                    ({{ answer["vote_number"] }})
+                    <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
+                </div>
+                <div class="answer_content">
+                    <h4 class="answer-user">xy said:</h4>
+                    {{ answer["message"] }} <a href="{{ url_for('edit_answer', answer_id=answer['id']) }}" title="Edit answer"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{{ url_for('delete_answer', answer_id=answer['id'], question_id=question_id) }}" title="Delete answer" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+            </div>
+                {% for comment in answer['comments'] %}
+                    <ul>
+                        <div class="comment_container">
+                            <time class="datetime">({{ comment['submission_time'] }})</time>
+                            <div class="comment_message">{{ comment['message'] }}
+                                <i>
+                                    {% if comment['edited_count'] %}
+                                        (edited {{ comment['edited_count'] }} times)
+                                    {% endif %}
+                                </i>
+                            </div>
+                        </div>
+                        <div class="comment_menu">
+
+                            <a href="{{ url_for('edit_comment', comment_id=comment['id']) }}" onclick="return confirm('Are you sure want to edit this?')"title="Edit comment"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" onclick="return confirm('Are you sure want to delete this?')"title="Delete comment"><i class="fa-solid fa-trash-can"></i></a>
+
+                        </div>
+                    </ul>
+                {% endfor %}
+                <a href="{{ url_for('add_comment_to_answer', question_id=question_id, answer_id=answer['id']) }}">Comment</a>
+            </li>
+        {% endfor %}
+    </ul>
+</table>
+<a href="{{ url_for('post_answer', question_id=question_id) }}">Post an Answer</a>
+{% endblock %}
+{% block right_div %}
+    <h3>Comments <a href="{{ url_for('add_comment_to_question', question_id=question_id) }}"><i class="fa-solid fa-feather"></i></a> </h3>
+    <tbody>
+        <tr>
+            {% for comment in comments %}
+                <li class="comment">{{ comment["message"] }}
+                    <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"] }}</time>
+                    <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" onclick="return confirm('Are you sure want to delete this?')">
+                        <i class="fa-solid fa-trash-can"></i></a>
+                    {# TODO create comment editor route               #}
+                    <a href=""><i class="fa-solid fa-pen-to-square"></i></a>
+                </li>
+            {% endfor %}
+        </tr>
+    </tbody>
+{% endblock %}

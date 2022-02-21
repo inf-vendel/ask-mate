@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %} FastFox Inc. {% endblock %}
+{% block left_div %}
+    <form action="/search" class="search_panel" method="GET">
+            <input name="search_phrase" type="search" class="search_input" maxlength="256" name="query" placeholder="Search…" id="search" required=""/>
+            <div class="search_options">
+                <h3>Search in:</h3>
+                <div>
+                  <input type="checkbox" name="search_in" value="question" checked>
+                      <label for="scales">Questions</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" name="search_in" value="answer">
+                  <label for="horns">Answers</label>
+                </div>
+                <div>
+                  <input type="checkbox" name="search_in" value="tag">
+                  <label for="horns">Tags</label>
+                </div>
+                <input type="submit" value="Search" class="search_button"/>
+            </div>
+    </form>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            {% for head in header %}
+                <th>
+                    {{ ' '.join(head.split('_')).title() }}
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='DESC') }}">▲</a>
+                    <a href="{{ url_for('list_questions', order_by=head, order_direction='ASC') }}">▼</a>
+                </th>
+
+            {% endfor %}
+        </tr>
+        <tbody>
+        {% for question in question_list %}
+            <tr>
+                {% for key,value in question.items() %}
+                    {% if key == 'id' %}
+                        <td><a href="{{ url_for('display_question', id=question['id']) }}" title="Open this question">{{ value }}</a></td>
+                    {% elif key == 'image' %}
+                        <td>
+                            <img src="{{ url_for('static', filename=value if value else 'no-image-icon-0.jpg') }}" alt="uwu" width="100">
+                        </td>
+                    {% else %}
+                        <td>{{ value }}</td>
+                    {% endif %}
+                {% endfor %}
+                <td>
+                    <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=+1) }}" title="Vote this question up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
+                    <a href="{{ url_for('vote_question', question_id=question['id'], vote_type=-1) }}"title="Vote this question down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </thead>
+    </table>
+{% endblock %}
+
+{% block right_div %}
+     <div class="grid-container">
+          <div class="grid-item">1</div>
+          <div class="grid-item">2</div>
+          <div class="grid-item">3</div>
+          <div class="grid-item">4</div>
+          <div class="grid-item">5</div>
+          <div class="grid-item">6</div>
+          <div class="grid-item">7</div>
+          <div class="grid-item">8</div>
+          <div class="grid-item">9</div>
+     </div>
+{% endblock %}

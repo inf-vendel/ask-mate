@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %} Asking - FastFox{% endblock %}
+
+{% block left_div %}
+{% endblock %}
+
+{% block content %}
+    <h1>Ask a Question</h1>
+<form action="/add-question" method="POST" enctype=multipart/form-data>
+    <p>
+        <label for="title">Title:</label><br>
+    <input name="title" type="text" required>
+    </p>
+    <p>
+      <label for="message">Message:</label><br>
+        <textarea name="message" type="text" required></textarea>
+    </p>
+    <p>
+        <label for="image" >Upload an image of your choice:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        <button type="submit">Submit question</button>
+    </p>
+</form>
+{% endblock %}
+
+{% block right_div %}
+{% endblock %}
