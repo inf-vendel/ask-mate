@@ -24,7 +24,8 @@ CREATE TABLE question (
     vote_number integer,
     title text,
     message text,
-    image text
+    image text,
+    user_id integer
 );
 
 DROP TABLE IF EXISTS public.answer;
@@ -34,7 +35,8 @@ CREATE TABLE answer (
     vote_number integer,
     question_id integer,
     message text,
-    image text
+    image text,
+    user_id integer
 );
 
 DROP TABLE IF EXISTS public.comment;
@@ -44,7 +46,8 @@ CREATE TABLE comment (
     answer_id integer,
     message text,
     submission_time timestamp without time zone,
-    edited_count integer
+    edited_count integer,
+    user_id integer
 );
 
 
@@ -60,6 +63,17 @@ CREATE TABLE tag (
     name text
 );
 
+DROP TABLE IF EXISTS public.users;
+CREATE TABLE users (
+    id serial NOT NULL,
+    username text,
+    password text,
+    registration_date timestamp without time zone,
+    profile_picture text,
+    reputation integer
+);
+ALTER TABLE ONLY users
+    ADD CONSTRAINT pk_user_id PRIMARY KEY (id);
 
 ALTER TABLE ONLY answer
     ADD CONSTRAINT pk_answer_id PRIMARY KEY (id);

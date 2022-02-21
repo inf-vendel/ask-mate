@@ -1,14 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import connection
 import data_manager
+import user_manager
 from datetime import timedelta
 from werkzeug.utils import secure_filename
 import os
+import time
 import bcrypt
 
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
-app.permanent_session_lifetime = timedelta(minutes=5)
+app.permanent_session_lifetime = timedelta(minutes=10)
+
 
 @app.route('/')
 @app.route("/list")
@@ -23,26 +26,63 @@ def list_questions(order_by="id", order_direction="desc", limit=0):
                            question_list=list, header=connection.QUESTION_HEADER)
 
 
-# @app.route("login", methods=['POST', 'GET'])
-# def login():
-#     if request.method == 'POST':
-#         session['username'] = request.form['username']
-#         session['password'] = request.form['password']
-#         # Authenticate!
-#         database = data.users
-#         if session['email'] in database and hashing.verify_password(session['password'], database[session['email']]):
-#             flash('You just logged in! Welcome buddy!')
-#             return redirect('index')
-#         else:
-#             session.pop('email', None)
-#             session.pop('password', None)
-#             flash('Invalid login attempt.')
-#             return redirect('login')
-#     else:
-#         if "email" in session:
-#             return redirect('index')
-#     return render_template('login.html')
+@app.route("/register", methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        session['password'] = request.form['psw']
+        if user_manager.auth_register(session['username']):
+            user_manager.register(session['username'], session['password'], "no_profile.png")
+            user = user_manager.authenticate_user(session['username'], session['password'])
+            session['id'] = user
+            return redirect('/list')
+        else:
+            flash('Username already taken!')
+    else:
+        if "id" in session:
+            return redirect('list')
+    return render_template('register.html')
 
+
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        session['password'] = request.form['psw']
+        user = user_manager.authenticate_user(session['username'], session['password'])
+        if user:
+            flash(f'You successfully logged in! Welcome {session["username"]}')
+            session.pop('username', None)
+            session.pop('password', None)
+            session['id'] = user
+            session.permanent = True
+            if request.form['remember']:
+                app.permanent_session_lifetime = timedelta(weeks=5)
+            return redirect('list')
+        else:
+            session.pop('username', None)
+            session.pop('password', None)
+            flash('Invalid login attempt.')
+            return redirect('login')
+    else:
+        if "id" in session:
+            return redirect('list')
+    return render_template('login.html')
+
+
+@app.route("/logout")
+def logout():
+    session.pop('id')
+    flash('Successfully logged out.')
+    return redirect('list')
+
+@app.route("/profile")
+def profile():
+    if 'id' in session:
+        user_info = user_manager.get_user_by_id(session['id'])
+        return render_template('profile.html', user_info=user_info)
+    else:
+        return redirect('login')
 
 
 
@@ -91,7 +131,6 @@ def add_tag(question_id):
     tags = data_manager.get_all_tag()
     question = data_manager.get_question_by_id(question_id)
     if request.method == 'POST':
-        print('End point reached.')
         tag_name = request.form.get('new_tag')
         data_manager.add_tag(question_id, tag_name)
     return redirect(f'/question/{question_id}')
@@ -99,19 +138,23 @@ def add_tag(question_id):
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def ask_question():
-    if request.method == 'POST':
-        result = request.form.to_dict()
-        file = request.files['image']
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join('static/', filename))
-            result['image'] = filename
-        else:
-            result['image'] = "no-image-icon-0.jpg"
-        data_manager.add_question(result)
+    if 'id' in session:
+        if request.method == 'POST':
+            result = request.form.to_dict()
+            file = request.files['image']
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('static/', filename))
+                result['image'] = filename
+            else:
+                result['image'] = "no-image-icon-0.jpg"
+            data_manager.add_question(result)
 
-        return redirect('/list')
-    return render_template('ask.html')
+            return redirect('/list')
+        return render_template('ask.html')
+    else:
+        flash('Please log in to use this function.')
+        return redirect('login')
 
 
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])

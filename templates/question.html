@@ -35,20 +35,18 @@
         </div>
     </div>
 
-
 <table>
     <h3 class="answer_header">Answers</h3>
-    <ul class="answer-wrapper">
+    <ul class="container answer-wrapper list-unstyled">
         {% for answer in answer_list %}
             <li class="answer_container">
-            <div class="answer-body">
-
-                <div class="answer_menu">
-                    <a href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
-                    ({{ answer["vote_number"] }})
-                    <a href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
+            <div class="answer-body row">
+                <div class="alert d-inline answer_menu col-1 alert-info">
+                    <a class="d-block" href="{{ url_for('vote_up_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
+                    <div class="d-block">{{ answer["vote_number"] }}</div>
+                    <a class="d-block" href="{{ url_for('vote_down_answer',  question_id=question_id, answer_id=answer['id']) }}" title="Vote down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
                 </div>
-                <div class="answer_content">
+                <div class="alert d-inline answer_content col-11 alert-dark">
                     <h4 class="answer-user">xy said:</h4>
                     {{ answer["message"] }} <a href="{{ url_for('edit_answer', answer_id=answer['id']) }}" title="Edit answer"><i class="fa-solid fa-pen-to-square"></i></a>
                     <a href="{{ url_for('delete_answer', answer_id=answer['id'], question_id=question_id) }}" title="Delete answer" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-trash-can"></i></a>
@@ -57,7 +55,7 @@
                 {% for comment in answer['comments'] %}
                     <ul>
                         <div class="comment_container">
-                            <time class="datetime">({{ comment['submission_time'] }})</time>
+                            <time class="datetime">({{ comment['submission_time'].strftime('%Y-%m-%d') }})</time>
                             <div class="comment_message">{{ comment['message'] }}
                                 <i>
                                     {% if comment['edited_count'] %}
@@ -87,7 +85,7 @@
         <tr>
             {% for comment in comments %}
                 <li class="comment">{{ comment["message"] }}
-                    <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"] }}</time>
+                    <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"].strftime('%Y-%m-%d') }}</time>
                     <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" onclick="return confirm('Are you sure want to delete this?')">
                         <i class="fa-solid fa-trash-can"></i></a>
                     {# TODO create comment editor route               #}

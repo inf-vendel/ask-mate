@@ -1,0 +1,26 @@
+.answer_menu {
+  text-align: center;
+}
+.answer_menu a {
+  color: black; /* Black text color */
+  display: block; /* Make the links appear below each other */
+  padding: 10px; /* Add some padding */
+  text-decoration: none; /* Remove underline from links */
+  margin: auto;
+  font-size: x-large;
+}
+.answer_menu a:hover{
+  color: #bf6e30;
+  background-color: inherit;
+  transition: 0.5s;
+}
+.answer_menu a:active{
+  background-color: #296b85;
+  color: white;
+}
+.answer_content {
+  font-size: large;
+  color: #114052  ;
+  display: inline-block;
+  margin: 20px 0 0 20px;
+}
