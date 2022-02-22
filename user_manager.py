@@ -34,10 +34,26 @@ def get_user_by_name(cursor, username):
 
 @database_common.connection_handler
 def get_user_by_id(cursor, user_id):
-    cursor.execute(sql.SQL("SELECT username, registration_date, profile_picture, reputation FROM users WHERE id={id}").format(
+    cursor.execute(sql.SQL("""SELECT id, username, registration_date, profile_picture, reputation
+        FROM users WHERE id={id}""").format(
         id=sql.Literal(user_id)
     ))
     return realdict_to_dict(cursor.fetchall())
+
+
+@database_common.connection_handler
+def get_user_questions(cursor, id):
+    cursor.execute(sql.SQL("""SELECT *
+    FROM users JOIN question ON users.id=question.user_id WHERE users.id={id};""").format(id=sql.Literal(id)))
+    result = cursor.fetchall()
+    return result
+
+
+@database_common.connection_handler
+def add_pp(cursor, id, filename):
+    cursor.execute(sql.SQL("""UPDATE users SET profile_picture={filename} WHERE id={id};""").format(
+        id=sql.Literal(id),
+        filename=sql.Literal(filename)))
 
 
 @database_common.connection_handler

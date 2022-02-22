@@ -20,7 +20,7 @@ def get_question_list(cursor):
 
 @database_common.connection_handler
 def get_question_by_id(cursor, id):
-    cursor.execute(sql.SQL("SELECT title, message FROM question WHERE {col}={id}").format(
+    cursor.execute(sql.SQL("SELECT * FROM question WHERE {col}={id}").format(
         col=sql.Literal(id),
         id=sql.Identifier('id'))
     )
@@ -116,13 +116,14 @@ def realdict_to_dict(d):
 
 
 @database_common.connection_handler
-def add_question(cursor, question):
-    cursor.execute(sql.SQL("""INSERT INTO question (submission_time,view_number,vote_number,title,message,image)
-    VALUES (CURRENT_TIMESTAMP, 0, 0, {title}, {message}, {image})""").format(
+def add_question(cursor, question, user_id):
+    cursor.execute(sql.SQL("""INSERT INTO question (submission_time,view_number,vote_number,title,message,image,user_id)
+    VALUES (CURRENT_TIMESTAMP, 0, 0, {title}, {message}, {image}, {user_id})""").format(
         message=sql.Literal(question['message']),
         title=sql.Literal(question['title']),
-        image=sql.Literal(question['image']))
-    )
+        image=sql.Literal(question['image']),
+        user_id=sql.Literal(user_id)
+    ))
 
 
 @database_common.connection_handler

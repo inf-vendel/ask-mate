@@ -6,6 +6,9 @@ from datetime import timedelta
 from werkzeug.utils import secure_filename
 import os
 from bonus_questions import SAMPLE_QUESTIONS
+from os.path import join, dirname, realpath
+
+UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/')
 
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
@@ -90,20 +93,36 @@ def profile():
         return redirect('login')
 
 
-
 @app.route("/question/<int:id>")
 def display_question(id):
     question = data_manager.get_question_by_id(id)
     comments = data_manager.get_comments_by_id('question_id', id)
-    header = ['title', 'message']
     answer = data_manager.get_answers_by_id('question_id', id)
     for reply in answer:
         reply["comments"] = (data_manager.get_comments_by_id('answer_id', reply['id']))
     data_manager.count_view(id)
     tags = data_manager.get_tags(id)
     all_tags = data_manager.get_all_tag()
+    asker = user_manager.get_user_by_id(question['user_id'])
+    if not asker:
+        asker = generate_profile()
+        asker['id'] = 0
     return render_template('question.html', comments=comments, result=question,
-                           answer_list=answer, header=header, question_id=id, tags=tags, all_tags=all_tags)
+                           answer_list=answer, question_id=id, tags=tags, all_tags=all_tags, asker=asker)
+
+
+@app.route("/user/<int:user_id>", methods=['GET', 'POST'])
+def show_user(user_id):
+    user = user_manager.get_user_by_id(user_id)
+    questions = user_manager.get_user_questions(user_id)
+    if not user:
+        user = generate_profile()
+        flash("User not found. :( As a compensation here's a randomly generated profile:", 'error')
+    return render_template('user.html', user_info=user, questions=questions)
+
+
+def generate_profile():
+    return {"username": "None Existent", "registration_date": "2000.12.12", "profile_picture": "cdcdcdcd2.jpg", "reputation": '-999'}
 
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
@@ -141,6 +160,16 @@ def add_tag(question_id):
     return redirect(f'/question/{question_id}')
 
 
+@app.route("/add_pp", methods=['GET', 'POST'])
+def add_pp():
+    if request.method == 'POST':
+        file = request.files['image']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(UPLOADS_PATH, filename))
+        user_manager.add_pp(session['id'], filename)
+        return redirect('profile')
+
+
 @app.route("/add-question", methods=['GET', 'POST'])
 def ask_question():
     if 'id' in session:
@@ -149,11 +178,11 @@ def ask_question():
             file = request.files['image']
             if file:
                 filename = secure_filename(file.filename)
-                file.save(os.path.join('static/', filename))
+                file.save(os.path.join(UPLOADS_PATH, filename))
                 result['image'] = filename
             else:
                 result['image'] = "no-image-icon-0.jpg"
-            data_manager.add_question(result)
+            data_manager.add_question(result, session['id'])
 
             return redirect('/list')
         return render_template('ask.html')
@@ -285,6 +314,11 @@ def new_tag(question_id):
         print('GET', request.form['new_tag'])
         return redirect(f'/question/{question_id}')
     return render_template('question.html', question_id=question_id)
+
+
+@app.route("/about")
+def about():
+    return render_template('about.html')
 
 
 def is_logged_in():

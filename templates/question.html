@@ -24,15 +24,20 @@
 {% block content %}
     <div class="question_container">
         <div class="question_body">
+            <h3><a href="{{ url_for('show_user', user_id=asker['id'])}}">{{ asker['username'] }}</a> asked:</h3>
             <h2>{{ result['title'] }}</h2>
             <p class="question-message">{{ result['message'] }}</p>
         </div>
+        {% if 'id' in session %}
+            {% if session['id'] == asker['id']%}
         <div class="question_icons">
             <a href="{{ url_for('edit_question', question_id=question_id) }}" onclick="return confirm('Are you sure want to edit this?')" title="Edit question"><i class="fa-solid fa-pen-to-square"></i></a>
             <a href="{{ url_for('delete_question', question_id=question_id) }}" onclick="return confirm('Are you sure want to delete this?')" title="Delete question"><i class="fa-solid fa-trash-can"></i></a>
             <a href="{{ url_for('vote_question', question_id=question_id, vote_type=+1) }}" title="Vote this question up!"><i class="fa-solid fa-circle-chevron-up"></i></a>
             <a href="{{ url_for('vote_question', question_id=question_id, vote_type=-1) }}" title="Vote this question down!"><i class="fa-solid fa-circle-chevron-down"></i></a>
         </div>
+                {% endif %}
+        {% endif %}
     </div>
 
 <table>
@@ -48,8 +53,8 @@
                 </div>
                 <div class="alert d-inline answer_content col-11 alert-dark">
                     <h4 class="answer-user">xy said:</h4>
-                    {{ answer["message"] }} <a href="{{ url_for('edit_answer', answer_id=answer['id']) }}" title="Edit answer"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="{{ url_for('delete_answer', answer_id=answer['id'], question_id=question_id) }}" title="Delete answer" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-trash-can"></i></a>
+                    {{ answer["message"] }} {% if 'id' in session%}<a href="{{ url_for('edit_answer', answer_id=answer['id']) }}" title="Edit answer"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{{ url_for('delete_answer', answer_id=answer['id'], question_id=question_id) }}" title="Delete answer" onclick="return confirm('Are you sure want to delete this?')"><i class="fa-solid fa-trash-can"></i></a>{% endif %}
                 </div>
             </div>
                 {% for comment in answer['comments'] %}
@@ -65,10 +70,10 @@
                             </div>
                         </div>
                         <div class="comment_menu">
-
+                            {% if 'id' in session%}
                             <a href="{{ url_for('edit_comment', comment_id=comment['id']) }}" onclick="return confirm('Are you sure want to edit this?')"title="Edit comment"><i class="fa-solid fa-pen-to-square"></i></a>
                             <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" onclick="return confirm('Are you sure want to delete this?')"title="Delete comment"><i class="fa-solid fa-trash-can"></i></a>
-
+                            {% endif %}
                         </div>
                     </ul>
                 {% endfor %}
@@ -85,11 +90,15 @@
         <tr>
             {% for comment in comments %}
                 <li class="comment">{{ comment["message"] }}
+                    <i>
+                        {% if comment['edited_count'] %}
+                            (edited {{ comment['edited_count'] }} times)
+                        {% endif %}
+                    </i>
                     <time datetime="YYYY-MM-DDThh:mm">{{ comment["submission_time"].strftime('%Y-%m-%d') }}</time>
                     <a href="{{ url_for('delete_question_comment', question_id=question_id, comment_id = comment["id"]) }}" onclick="return confirm('Are you sure want to delete this?')">
                         <i class="fa-solid fa-trash-can"></i></a>
-                    {# TODO create comment editor route               #}
-                    <a href=""><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{{ url_for('edit_comment', comment_id=comment['id']) }}" onclick="return confirm('Are you sure want to edit this?')" title="Edit comment"><i class="fa-solid fa-pen-to-square"></i></a>
                 </li>
             {% endfor %}
         </tr>
