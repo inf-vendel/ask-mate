@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block title %} {{ user_info['username'] }} {% endblock %}
 {% block left_div %}
+    <ul class="list-unstyled">
+        <div class="menu-button">Edit profile</div>
+        <div class="menu-button">Change Avatar</div>
+        <div class="menu-button">Account settings</div>
+    </ul>
 {% endblock %}
 {% block content %}
     <div class="container d-flex justify-content-center align-items-center">

@@ -9,7 +9,6 @@ from data_manager import realdict_to_dict
 def auth_register(cursor, username):
     # Authenticate registration
     if get_user_by_name(username):
-        print(get_user_by_name(username))
         return False
     else:
         return True
@@ -53,9 +52,3 @@ def authenticate_user(cursor, username, password):
         return data[0]['id']
     else:
         return False
-
-
-@database_common.connection_handler
-def login(cursor, username, password):
-    cursor.execute(sql.SQL("SELECT * FROM question ORDER BY id ASC"))
-    return cursor.fetchall()

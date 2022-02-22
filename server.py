@@ -5,8 +5,7 @@ import user_manager
 from datetime import timedelta
 from werkzeug.utils import secure_filename
 import os
-import time
-import bcrypt
+from bonus_questions import SAMPLE_QUESTIONS
 
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
@@ -51,15 +50,17 @@ def login():
         session['password'] = request.form['psw']
         # TODO check if password is acceptable (length, special char, num)
         # TODO check if username is acceptable (only abc,ABC,0-9)
-        user = user_manager.authenticate_user(session['username'], session['password'])
-        if user:
+        user_id = user_manager.authenticate_user(session['username'], session['password'])
+        if user_id:
             flash(f'You successfully logged in! Welcome {session["username"]}')
             session.pop('username', None)
             session.pop('password', None)
-            session['id'] = user
+            session['id'] = user_id
             session.permanent = True
             if request.form['remember']:
                 app.permanent_session_lifetime = timedelta(weeks=5)
+            else:
+                app.permanent_session_lifetime = timedelta(minutes=30)
             return redirect('list')
         else:
             session.pop('username', None)
@@ -67,16 +68,18 @@ def login():
             flash(u'Invalid login attempt.', 'error')
             return redirect('login')
     else:
-        if "id" in session:
+        if is_logged_in():
             return redirect('list')
     return render_template('login.html')
 
 
 @app.route("/logout")
 def logout():
-    session.pop('id')
-    flash('Successfully logged out.')
+    if 'id' in session:
+        session.pop('id')
+        flash('Successfully logged out.')
     return redirect('list')
+
 
 @app.route("/profile")
 def profile():
@@ -161,19 +164,24 @@ def ask_question():
 
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
-    if request.method == 'POST':
-        result = request.form.to_dict()
-        file = request.files['image']
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join('static', filename))
-            # TODO file cannot be saved!
-            result['image'] = filename
-        else:
-            result['image'] = "no-image-icon-0.jpg"
-        data_manager.post_answer(result, question_id=question_id)
-        return redirect(f'/question/{question_id}')
-    return render_template('new_answer.html', question_id=question_id)
+    if 'id' in session:
+        if request.method == 'POST':
+            result = request.form.to_dict()
+            file = request.files['image']
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('static', filename))
+                # TODO file cannot be saved!
+                result['image'] = filename
+            else:
+                result['image'] = "no-image-icon-0.jpg"
+            data_manager.post_answer(result, question_id=question_id)
+            return redirect(f'/question/{question_id}')
+        return render_template('new_answer.html', question_id=question_id)
+    else:
+        flash('Please log in to use this function.')
+        return redirect('login')
+
 
 
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
@@ -233,6 +241,7 @@ def vote_down_answer(answer_id, question_id):
 
 @app.route("/question/<int:question_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_question(question_id):
+    is_logged_in()
     if request.method == 'POST':
         result = request.form.to_dict()
         data_manager.post_comment(comment = result['message'], id=question_id, idtype='question_id')
@@ -278,22 +287,16 @@ def new_tag(question_id):
     return render_template('question.html', question_id=question_id)
 
 
+def is_logged_in():
+    return True if 'id' in session else False
+
 
 if __name__ == "__main__":
     app.run(
         port=5000,
         debug=True,
     )
-from flask import Flask, render_template
-from bonus_questions import SAMPLE_QUESTIONS
-
-app = Flask(__name__)
-
 
 @app.route("/bonus-questions")
 def main():
     return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
