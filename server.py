@@ -115,10 +115,13 @@ def display_question(id):
 def show_user(user_id):
     user = user_manager.get_user_by_id(user_id)
     questions = user_manager.get_user_questions(user_id)
+    answers = user_manager.get_user_answers(user_id)
+    comments = user_manager.get_user_comments(user_id)
+    print(answers)
     if not user:
         user = generate_profile()
         flash("User not found. :( As a compensation here's a randomly generated profile:", 'error')
-    return render_template('user.html', user_info=user, questions=questions)
+    return render_template('user.html', user_info=user, questions=questions, answers=answers, comments=comments)
 
 
 def generate_profile():
@@ -170,6 +173,15 @@ def add_pp():
         return redirect('profile')
 
 
+@app.route("/users", methods=['GET', 'POST'])
+def list_users():
+    if not is_logged_in():
+        members = user_manager.get_all_user()
+        return render_template('members.html', member_list=members)
+    else:
+        return redirect('login')
+
+
 @app.route("/add-question", methods=['GET', 'POST'])
 def ask_question():
     if 'id' in session:
@@ -204,7 +216,7 @@ def post_answer(question_id):
                 result['image'] = filename
             else:
                 result['image'] = "no-image-icon-0.jpg"
-            data_manager.post_answer(result, question_id=question_id)
+            data_manager.post_answer(result, question_id=question_id, user_id=session['id'])
             return redirect(f'/question/{question_id}')
         return render_template('new_answer.html', question_id=question_id)
     else:
@@ -273,7 +285,7 @@ def add_comment_to_question(question_id):
     is_logged_in()
     if request.method == 'POST':
         result = request.form.to_dict()
-        data_manager.post_comment(comment = result['message'], id=question_id, idtype='question_id')
+        data_manager.post_comment(comment = result['message'], id=question_id, idtype='question_id', user_id=session['id'])
         return redirect(f'/question/{question_id}')
     return render_template('comment_question.html', question_id=question_id)
 
@@ -283,7 +295,7 @@ def add_comment_to_answer(answer_id):
     if request.method == 'POST':
         answer = data_manager.realdict_to_dict(data_manager.get_answers_by_id('id', answer_id))
         result = request.form.to_dict()
-        data_manager.post_comment(comment=result['message'], id=answer_id, idtype='answer_id')
+        data_manager.post_comment(comment=result['message'], id=answer_id, idtype='answer_id', user_id=session['id'])
         return redirect(f"/question/{answer['question_id']}")
     return render_template('comment_answer.html', answer_id=answer_id)
 
@@ -323,6 +335,11 @@ def about():
 
 def is_logged_in():
     return True if 'id' in session else False
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return redirect('login')
 
 
 if __name__ == "__main__":

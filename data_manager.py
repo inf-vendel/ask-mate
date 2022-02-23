@@ -134,30 +134,25 @@ def delete_row(cursor, question_id, dataset):
     )
 
 
-@database_common.connection_handler
-def post_answer(cursor, answer, question_id):
-    query = f"""INSERT INTO answer (submission_time,vote_number,question_id,message,image) 
-        VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(answer_message)s, %(answer_image)s)"""
-    data = {'question_id': question_id, 'answer_message': answer['message'], 'answer_image': answer['image']}
-    cursor.execute(query, data)
-
 
 @database_common.connection_handler
-def post_answer(cursor, answer, question_id):
-    cursor.execute(sql.SQL("""INSERT INTO answer (submission_time,vote_number,question_id,message,image) 
-        VALUES (CURRENT_TIMESTAMP, 0, {question_id}, {answer_message}, {answer_image})""").format(
+def post_answer(cursor, answer, question_id, user_id):
+    cursor.execute(sql.SQL("""INSERT INTO answer (submission_time,vote_number,question_id,message,image, user_id) 
+        VALUES (CURRENT_TIMESTAMP, 0, {question_id}, {answer_message}, {answer_image}, {user_id})""").format(
         answer_message=sql.Literal(answer['message']),
         answer_image=sql.Literal(answer['image']),
-        question_id=sql.Literal(question_id))
-    )
+        question_id=sql.Literal(question_id),
+        user_id=sql.Literal(user_id),
+    ))
 
 
 @database_common.connection_handler
-def post_comment(cursor, comment, id, idtype):
-    cursor.execute(sql.SQL("""INSERT INTO comment ({idtype}, message, submission_time, edited_count)
-    VALUES ({id},{message}, CURRENT_TIMESTAMP, 0)""").format(
+def post_comment(cursor, comment, id, idtype, user_id):
+    cursor.execute(sql.SQL("""INSERT INTO comment ({idtype}, message, submission_time, edited_count, user_id)
+    VALUES ({id},{message}, CURRENT_TIMESTAMP, 0, {user_id})""").format(
         idtype=sql.SQL(idtype),
         id=sql.Literal(id),
+        user_id=sql.Literal(user_id),
         message=sql.Literal(comment))
     )
 

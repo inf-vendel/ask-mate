@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %} Members of FastFoxes {% endblock %}
+{% block left_div %}
+{% endblock %}
+{% block content %}
+    <table>
+    <thead>
+        <tr>
+             <th> Username </th>
+             <th> Member since </th>
+             <th> Asked </th>
+             <th> Answered </th>
+             <th> Commented </th>
+             <th> Reputation </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key in member_list %}
+            <tr>
+                {% for value in key %}
+                    {% if value=='registration_date'  %}
+                        <td>{{ key[value].strftime('%Y-%m-%d %H:%M') }}</td>
+                    {% else %}
+                        <td><a href="/user/{{ key['id'] }}">{{ key[value] }}</a></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
+{% block right_div %}
+{% endblock %}
